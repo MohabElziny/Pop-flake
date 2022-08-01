@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.android.extensions'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -68,4 +69,25 @@ dependencies {
     //ViewModel and livedata
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+
+    //paging 3
+    implementation 'androidx.paging:paging-runtime:3.1.1'
+//    implementation 'androidx.paging:paging-runtime-ktx:3.1.1'
+
+    //lottie
+    implementation "com.airbnb.android:lottie:5.1.1"
+
+    //shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    // Material View Pager Dots Indicator
+    implementation("com.tbuonomo:dotsindicator:4.3")
+
+    //hilt
+    implementation("com.google.dagger:hilt-android:2.38.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.38.1")
+}
+
+kapt {
+    correctErrorTypes = true
 }
