@@ -1,22 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.home.HomeFragment"
+    tools:ignore="SpeakableTextPresentCheck">
 
-    <TextView
-        android:id="@+id/text_home"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager2"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_margin="16dp"
+            android:maxHeight="150dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+            android:id="@+id/worm_dots_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:dotsSize="16dp"
+            app:dotsSpacing="4dp"
+            app:dotsWidthFactor="2.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/viewPager2"
+            app:layout_constraintTop_toBottomOf="@+id/viewPager2"
+            app:progressMode="false" />
+
+        <TextView
+            android:id="@+id/txt_coming_soon"
+            style="@style/heading3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/coming_soon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/worm_dots_indicator" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/coming_soon_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@id/viewPager2"
+            app:layout_constraintStart_toStartOf="@id/txt_coming_soon"
+            app:layout_constraintTop_toBottomOf="@id/txt_coming_soon"
+            tools:itemCount="5" />
+
+        <TextView
+            android:id="@+id/txt_in_theaters"
+            style="@style/heading3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/in_theaters"
+            app:layout_constraintStart_toStartOf="@id/txt_coming_soon"
+            app:layout_constraintTop_toBottomOf="@id/coming_soon_recyclerview" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/in_theaters_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@id/viewPager2"
+            app:layout_constraintStart_toStartOf="@id/txt_in_theaters"
+            app:layout_constraintTop_toBottomOf="@id/txt_in_theaters"
+            tools:itemCount="5" />
+
+        <TextView
+            android:id="@+id/txt_top_rated"
+            style="@style/heading3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/top_rated"
+            app:layout_constraintStart_toStartOf="@id/txt_coming_soon"
+            app:layout_constraintTop_toBottomOf="@id/in_theaters_recyclerview" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/top_rated_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@id/viewPager2"
+            app:layout_constraintStart_toStartOf="@id/txt_top_rated"
+            app:layout_constraintTop_toBottomOf="@id/txt_top_rated"
+            tools:itemCount="5" />
+
+        <TextView
+            android:id="@+id/txt_box_office"
+            style="@style/heading3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/box_office"
+            app:layout_constraintStart_toStartOf="@id/txt_coming_soon"
+            app:layout_constraintTop_toBottomOf="@id/top_rated_recyclerview" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/box_office_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/viewPager2"
+            app:layout_constraintStart_toStartOf="@id/txt_box_office"
+            app:layout_constraintTop_toBottomOf="@id/txt_box_office"
+            tools:itemCount="5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
