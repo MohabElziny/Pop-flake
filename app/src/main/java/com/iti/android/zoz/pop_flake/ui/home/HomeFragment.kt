@@ -5,21 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.iti.android.zoz.pop_flake.R
+import com.iti.android.zoz.pop_flake.data.ResultState
 import com.iti.android.zoz.pop_flake.databinding.FragmentHomeBinding
-import com.iti.android.zoz.pop_flake.pojos.BoxOfficeMovie
-import com.iti.android.zoz.pop_flake.pojos.Movie
-import com.iti.android.zoz.pop_flake.pojos.TopMovie
-import com.iti.android.zoz.pop_flake.ui.home.adapters.BoxOfficeAdapter
-import com.iti.android.zoz.pop_flake.ui.home.adapters.ComingSoonAdapter
-import com.iti.android.zoz.pop_flake.ui.home.adapters.InTheaterAdapter
-import com.iti.android.zoz.pop_flake.ui.home.adapters.TopRatedAdapter
+import com.iti.android.zoz.pop_flake.ui.home.adapters.*
+import com.iti.android.zoz.pop_flake.ui.home.viewmodel.HomeViewModel
+import com.iti.android.zoz.pop_flake.utils.ZoomOutPageTransformer
+import com.iti.android.zoz.pop_flake.utils.showSnackBar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.buffer
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    //    private val homeViewModel: HomeViewModel by viewModels{}
+    private val homeViewModel: HomeViewModel by viewModels()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -36,6 +42,9 @@ class HomeFragment : Fragment() {
     private var _boxOfficeAdapter: BoxOfficeAdapter? = null
     private val boxOfficeAdapter get() = _boxOfficeAdapter!!
 
+    private var _trailersAdapter: TrailerViewPagerAdapter? = null
+    private val trailersAdapter get() = _trailersAdapter!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,15 +56,33 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initializeTrailerViewPagerAdapter()
         initializeComingSoonAdapter()
         initializeInTheatersAdapter()
         initializeTopRatedAdapter()
         initializeBoxOfficeAdapter()
 
-        comingSoonAdapter.setComingSoonMoviesList(comingList)
-        inTheatersAdapter.setInTheaterMoviesList(inThList)
-        topRatedAdapter.setTopRatedMoviesList(topList)
-        boxOfficeAdapter.setBoxOfficeMoviesList(boxList)
+        homeViewModel.getMovies()
+        homeViewModel.getPostersList()
+        homeViewModelObserve()
+    }
+
+    private fun initializeTrailerViewPagerAdapter() {
+        _trailersAdapter = TrailerViewPagerAdapter()
+        binding.viewPager2.apply {
+            adapter = trailersAdapter
+            binding.wormDotsIndicator.attachTo(this)
+            val zoomOutPageTransformer = ZoomOutPageTransformer()
+            setPageTransformer { page, position ->
+                zoomOutPageTransformer.transformPage(page, position)
+            }
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    homeViewModel.setManualViewPagerPosition(position)
+                }
+            })
+        }
     }
 
     private fun initializeBoxOfficeAdapter() {
@@ -74,7 +101,8 @@ class HomeFragment : Fragment() {
     private fun initializeTopRatedAdapter() {
         _topRatedAdapter = TopRatedAdapter()
         binding.topRatedRecyclerview.apply {
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             adapter = topRatedAdapter
         }
     }
@@ -82,7 +110,8 @@ class HomeFragment : Fragment() {
     private fun initializeInTheatersAdapter() {
         _inTheatersAdapter = InTheaterAdapter()
         binding.inTheatersRecyclerview.apply {
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             adapter = inTheatersAdapter
         }
     }
@@ -90,125 +119,134 @@ class HomeFragment : Fragment() {
     private fun initializeComingSoonAdapter() {
         _comingSoonAdapter = ComingSoonAdapter()
         binding.comingSoonRecyclerview.apply {
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             adapter = comingSoonAdapter
+        }
+    }
+
+    private fun homeViewModelObserve() {
+        posterObservation()
+        comingSoonMoviesObservation()
+        inTheatersMoviesObservation()
+        topRatedMoviesObservation()
+        boxOfficeMoviesObservation()
+        visibilityObservation()
+    }
+
+    private fun posterObservation() {
+        binding.viewPager2.visibility = View.INVISIBLE
+        binding.wormDotsIndicator.visibility = View.INVISIBLE
+        lifecycleScope.launch {
+            homeViewModel.postersList.observe(viewLifecycleOwner) {
+                trailersAdapter.setPostersList(it)
+                homeViewModel.startSwap()
+            }
+        }
+        lifecycleScope.launch {
+            homeViewModel.viewPagerPosition.observe(viewLifecycleOwner) {
+                binding.viewPager2.setCurrentItem(it, true)
+            }
+        }
+    }
+
+    private fun comingSoonMoviesObservation() {
+        lifecycleScope.launchWhenStarted {
+            homeViewModel.comingSoonMovies.buffer().collect { comingSoonMoviesResult ->
+                when (comingSoonMoviesResult) {
+                    ResultState.EmptyResult -> showSnackBar(getString(R.string.no_coming_soon_movies))
+                    is ResultState.Error -> showSnackBar(comingSoonMoviesResult.errorString)
+                    ResultState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.comingSoonRecyclerview.visibility = View.INVISIBLE
+                    }
+                    is ResultState.Success -> comingSoonAdapter.setComingSoonMoviesList(
+                        comingSoonMoviesResult.data
+                    )
+                }
+            }
+        }
+    }
+
+    private fun inTheatersMoviesObservation() {
+        lifecycleScope.launchWhenStarted {
+            homeViewModel.inTheaterMovies.buffer().collect { inTheatersMoviesResult ->
+                when (inTheatersMoviesResult) {
+                    ResultState.EmptyResult -> showSnackBar(getString(R.string.no_in_theaters_movies))
+                    is ResultState.Error -> showSnackBar(inTheatersMoviesResult.errorString)
+                    ResultState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.inTheatersRecyclerview.visibility = View.INVISIBLE
+                    }
+                    is ResultState.Success -> inTheatersAdapter.setInTheaterMoviesList(
+                        inTheatersMoviesResult.data
+                    )
+                }
+            }
+        }
+    }
+
+    private fun topRatedMoviesObservation() {
+        lifecycleScope.launchWhenStarted {
+            homeViewModel.topRatedMovies.buffer().collect { topRatedMoviesResult ->
+                when (topRatedMoviesResult) {
+                    ResultState.EmptyResult -> showSnackBar(getString(R.string.no_top_rated_movies))
+                    is ResultState.Error -> showSnackBar(topRatedMoviesResult.errorString)
+                    ResultState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.topRatedRecyclerview.visibility = View.INVISIBLE
+                    }
+                    is ResultState.Success -> topRatedAdapter.setTopRatedMoviesList(
+                        topRatedMoviesResult.data
+                    )
+                }
+            }
+        }
+    }
+
+    private fun boxOfficeMoviesObservation() {
+        lifecycleScope.launchWhenStarted {
+            homeViewModel.boxOfficeMovies.buffer().collect { boxOfficeMoviesResult ->
+                when (boxOfficeMoviesResult) {
+                    ResultState.EmptyResult -> showSnackBar(getString(R.string.no_box_office_movies))
+                    is ResultState.Error -> showSnackBar(boxOfficeMoviesResult.errorString)
+                    ResultState.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.boxOfficeRecyclerview.visibility = View.INVISIBLE
+                    }
+                    is ResultState.Success -> boxOfficeAdapter.setBoxOfficeMoviesList(
+                        boxOfficeMoviesResult.data
+                    )
+                }
+            }
+        }
+    }
+
+    private fun visibilityObservation() {
+        lifecycleScope.launch {
+            homeViewModel.receivedAllData.observe(viewLifecycleOwner) { receivedAll ->
+                if (receivedAll) {
+                    binding.apply {
+                        progressBar.visibility = View.GONE
+                        boxOfficeRecyclerview.visibility = View.VISIBLE
+                        inTheatersRecyclerview.visibility = View.VISIBLE
+                        comingSoonRecyclerview.visibility = View.VISIBLE
+                        topRatedRecyclerview.visibility = View.VISIBLE
+                        viewPager2.visibility = View.VISIBLE
+                        wormDotsIndicator.visibility = View.VISIBLE
+                    }
+                }
+            }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        homeViewModel.stopSwap()
         _topRatedAdapter = null
         _inTheatersAdapter = null
         _comingSoonAdapter = null
         _boxOfficeAdapter = null
         _binding = null
     }
-
-    private val comingList: List<Movie> = listOf(
-        Movie(
-            "tt12593682",
-            "Bullet Train",
-            "2022",
-            "05 August 2022",
-            "https://imdb-api.com/images/128x176/nopicture.jpg"
-        ),
-        Movie(
-            "tt8110652",
-            "Bodies Bodies Bodies",
-            "2022",
-            "05 August 2022",
-            "https://imdb-api.com/images/128x176/nopicture.jpg"
-        ),
-        Movie(
-            "tt11952606",
-            "Easter Sunday",
-            "2022",
-            "05 August 2022",
-            "https://imdb-api.com/images/128x176/nopicture.jpg"
-        )
-    )
-
-    private val inThList: List<Movie> = listOf(
-        Movie(
-            "tt10954984",
-            "Nope",
-            "2022",
-            "22 Jul 2022",
-            "https://m.media-amazon.com/images/M/MV5BMGIyNTI3NWItNTJkOS00MGYyLWE4NjgtZDhjMWQ4Y2JkZTU5XkEyXkFqcGdeQXVyNjY1MTg4Mzc@._V1_UX128_CR0,12,128,176_AL_.jpg",
-            "7.5"
-        ),
-        Movie(
-            "tt10648342",
-            "Thor: Love and Thunder",
-            "2022",
-            "08 Jul 2022",
-            "https://m.media-amazon.com/images/M/MV5BYmMxZWRiMTgtZjM0Ny00NDQxLWIxYWQtZDdlNDNkOTEzYTdlXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_UX128_CR0,12,128,176_AL_.jpg",
-            "6.8"
-        ),
-        Movie(
-            "tt7144666",
-            "The Black Phone",
-            "2021",
-            "24 Jun 2022",
-            "https://m.media-amazon.com/images/M/MV5BOWVmNTBiYTUtZWQ3Yi00ZDlhLTgyYjUtNzBhZjM3YjRiNGRkXkEyXkFqcGdeQXVyNzYyOTM1ODI@._V1_UX128_CR0,12,128,176_AL_.jpg",
-            "7"
-        )
-    )
-
-    private val topList: List<TopMovie> = listOf(
-        TopMovie(
-            "tt0111161",
-            "1",
-            "The Shawshank Redemption",
-            "1994",
-            "https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_Ratio0.6716_AL_.jpg",
-            "9.2"
-        ),
-        TopMovie(
-            "tt0068646",
-            "2",
-            "The Godfather",
-            "1972",
-            "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_Ratio0.7015_AL_.jpg",
-            "9.2"
-        ),
-        TopMovie(
-            "tt0468569",
-            "3",
-            "The Dark Knight",
-            "2008",
-            "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_Ratio0.6716_AL_.jpg",
-            "9.0"
-        )
-    )
-
-    private val boxList: List<BoxOfficeMovie> = listOf(
-        BoxOfficeMovie(
-            "tt8912936",
-            "1",
-            "DC League of Super-Pets",
-            "https://m.media-amazon.com/images/M/MV5BNjA5ZDBlMDMtZTM3Zi00MGEwLWJkZmMtMGEyOGRmMTA2NWQ3XkEyXkFqcGdeQXVyMTUzOTcyODA5._V1_UX128_CR0,3,128,176_AL_.jpg",
-            "$23.0M",
-            "$23.0M",
-            "1"
-        ),
-        BoxOfficeMovie(
-            "tt10954984",
-            "2",
-            "Nope",
-            "https://m.media-amazon.com/images/M/MV5BMGIyNTI3NWItNTJkOS00MGYyLWE4NjgtZDhjMWQ4Y2JkZTU5XkEyXkFqcGdeQXVyNjY1MTg4Mzc@._V1_UX128_CR0,3,128,176_AL_.jpg",
-            "$18.5M",
-            "$80.6M",
-            "2"
-        ),
-        BoxOfficeMovie(
-            "tt10648342",
-            "3",
-            "Thor: Love and Thunder",
-            "https://m.media-amazon.com/images/M/MV5BYmMxZWRiMTgtZjM0Ny00NDQxLWIxYWQtZDdlNDNkOTEzYTdlXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_UX128_CR0,3,128,176_AL_.jpg",
-            "$13.1M",
-            "$301.5M",
-            "4"
-        )
-    )
 }

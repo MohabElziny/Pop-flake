@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iti.android.zoz.pop_flake.R
 import com.iti.android.zoz.pop_flake.databinding.FilmWithRatingCardBinding
-import com.iti.android.zoz.pop_flake.pojos.TopMovie
+import com.iti.android.zoz.pop_flake.data.pojos.TopMovie
 
 class TopRatedAdapter : RecyclerView.Adapter<TopRatedAdapter.TopRatedViewHolder>() {
 

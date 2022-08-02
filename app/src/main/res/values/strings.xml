@@ -11,4 +11,8 @@
     <string name="dark_mode">Dark mode</string>
     <string name="rank">"Rank: "</string>
     <string name="release_date">"Release date: "</string>
+    <string name="no_coming_soon_movies">No coming soon movies</string>
+    <string name="no_in_theaters_movies">No in theaters movies</string>
+    <string name="no_top_rated_movies">No top rated movies</string>
+    <string name="no_box_office_movies">No box office movies</string>
 </resources>

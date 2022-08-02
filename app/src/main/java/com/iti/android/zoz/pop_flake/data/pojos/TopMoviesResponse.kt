@@ -1,4 +1,4 @@
-package com.iti.android.zoz.pop_flake.pojos
+package com.iti.android.zoz.pop_flake.data.pojos
 
 import com.google.gson.annotations.SerializedName
 

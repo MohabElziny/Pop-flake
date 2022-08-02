@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iti.android.zoz.pop_flake.databinding.FilmWithRatingCardBinding
-import com.iti.android.zoz.pop_flake.pojos.Movie
+import com.iti.android.zoz.pop_flake.data.pojos.Movie
 
 class InTheaterAdapter : RecyclerView.Adapter<InTheaterAdapter.InTheaterViewHolder>() {
 
