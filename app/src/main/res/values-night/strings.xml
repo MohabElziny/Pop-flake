@@ -10,4 +10,6 @@
     <string name="box_office">Box Office</string>
     <string name="film_image">Film Image</string>
     <string name="dark_mode">Dark mode</string>
+    <string name="rank">"Rank: "</string>
+    <string name="release_date">"Release date: "</string>
 </resources>
