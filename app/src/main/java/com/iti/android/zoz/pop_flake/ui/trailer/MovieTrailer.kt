@@ -26,15 +26,15 @@ class MovieTrailer : Fragment() {
     private val movieTrailerViewModel: MovieTrailerViewModel by viewModels()
     private val args: MovieTrailerArgs by navArgs()
 
-    private var _binding: FragmentMovieTrailerBinding? = null
-    private val binding get() = _binding!!
+    private var _movieTrailerBinding: FragmentMovieTrailerBinding? = null
+    private val movieTrailerBinding get() = _movieTrailerBinding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMovieTrailerBinding.inflate(inflater, container, false)
-        return binding.root
+        _movieTrailerBinding = FragmentMovieTrailerBinding.inflate(inflater, container, false)
+        return movieTrailerBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,8 +46,8 @@ class MovieTrailer : Fragment() {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun prepareMediaController() {
-        binding.trailerVideoView.settings.javaScriptEnabled = true
-        binding.trailerVideoView.webViewClient = object : WebViewClient() {
+        movieTrailerBinding.trailerVideoView.settings.javaScriptEnabled = true
+        movieTrailerBinding.trailerVideoView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
@@ -65,13 +65,13 @@ class MovieTrailer : Fragment() {
                 when (resultState) {
                     ResultState.EmptyResult -> {
                         showSnackBar(getString(R.string.no_trailer_found))
-                        binding.progressBar2.visibility = View.GONE
+                        movieTrailerBinding.progressBar2.visibility = View.GONE
                     }
                     is ResultState.Error -> {
                         showSnackBar(resultState.errorString)
-                        binding.progressBar2.visibility = View.GONE
+                        movieTrailerBinding.progressBar2.visibility = View.GONE
                     }
-                    ResultState.Loading -> binding.progressBar2.visibility = View.VISIBLE
+                    ResultState.Loading -> movieTrailerBinding.progressBar2.visibility = View.VISIBLE
                     is ResultState.Success -> handleSuccessState(resultState.data)
                 }
             }
@@ -79,7 +79,7 @@ class MovieTrailer : Fragment() {
     }
 
     private fun handleSuccessState(movieTrailer: MovieTrailer) {
-        binding.apply {
+        movieTrailerBinding.apply {
             textView.text = movieTrailer.title
             trailerVideoView.loadUrl(movieTrailer.videoLinkEmbed)
             progressBar2.visibility = View.GONE
@@ -91,7 +91,7 @@ class MovieTrailer : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        _movieTrailerBinding = null
     }
 
 }

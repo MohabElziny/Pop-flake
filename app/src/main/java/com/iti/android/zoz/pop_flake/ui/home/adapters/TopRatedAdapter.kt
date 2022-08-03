@@ -9,7 +9,8 @@ import com.iti.android.zoz.pop_flake.R
 import com.iti.android.zoz.pop_flake.data.pojos.TopMovie
 import com.iti.android.zoz.pop_flake.databinding.RatedMovieCardBinding
 
-class TopRatedAdapter : RecyclerView.Adapter<TopRatedAdapter.TopRatedViewHolder>() {
+class TopRatedAdapter(private val showMovieDetails: (String) -> Unit) :
+    RecyclerView.Adapter<TopRatedAdapter.TopRatedViewHolder>() {
 
     private var topRatedMovies: List<TopMovie> = emptyList()
 
@@ -22,6 +23,12 @@ class TopRatedAdapter : RecyclerView.Adapter<TopRatedAdapter.TopRatedViewHolder>
     inner class TopRatedViewHolder(private val topRatedBinding: RatedMovieCardBinding) :
         RecyclerView.ViewHolder(topRatedBinding.root) {
         private val topRatedMovie get() = topRatedMovies[bindingAdapterPosition]
+
+        init {
+            topRatedBinding.movieCard.setOnClickListener {
+                showMovieDetails(topRatedMovie.id)
+            }
+        }
 
         fun bindData() {
             topRatedBinding.apply {

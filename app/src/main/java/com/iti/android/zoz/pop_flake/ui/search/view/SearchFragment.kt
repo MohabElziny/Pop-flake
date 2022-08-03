@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.iti.android.zoz.pop_flake.R
@@ -47,7 +48,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun initializeSearchingAdapter() {
-        _searchingAdapter = SearchingAdapter()
+        _searchingAdapter = SearchingAdapter(showMovieDetails)
         binding.searchingRecyclingView.apply {
             layoutManager = GridLayoutManager(
                 requireContext(),
@@ -93,6 +94,12 @@ class SearchFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private val showMovieDetails: (String) -> Unit = { movieId ->
+        findNavController().navigate(
+            SearchFragmentDirections.actionNavigationSearchToMovieDetailsWebView(movieId)
+        )
     }
 
     override fun onDestroyView() {

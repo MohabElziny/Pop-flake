@@ -9,7 +9,8 @@ import com.iti.android.zoz.pop_flake.R
 import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMovie
 import com.iti.android.zoz.pop_flake.databinding.DefaultMovieCardBinding
 
-class BoxOfficeAdapter : RecyclerView.Adapter<BoxOfficeAdapter.BoxOfficeViewHolder>() {
+class BoxOfficeAdapter(private val showMovieDetails: (String) -> Unit) :
+    RecyclerView.Adapter<BoxOfficeAdapter.BoxOfficeViewHolder>() {
 
     private var boxOfficeMovies: List<BoxOfficeMovie> = emptyList()
 
@@ -22,6 +23,12 @@ class BoxOfficeAdapter : RecyclerView.Adapter<BoxOfficeAdapter.BoxOfficeViewHold
     inner class BoxOfficeViewHolder(private val boxOfficeBinding: DefaultMovieCardBinding) :
         RecyclerView.ViewHolder(boxOfficeBinding.root) {
         private val boxOfficeMovie get() = boxOfficeMovies[bindingAdapterPosition]
+
+        init {
+            boxOfficeBinding.movieCard.setOnClickListener {
+                showMovieDetails(boxOfficeMovie.id)
+            }
+        }
 
         fun bindData() {
             boxOfficeBinding.apply {

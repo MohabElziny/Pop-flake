@@ -9,7 +9,8 @@ import com.iti.android.zoz.pop_flake.R
 import com.iti.android.zoz.pop_flake.data.pojos.Movie
 import com.iti.android.zoz.pop_flake.databinding.DefaultMovieCardBinding
 
-class ComingSoonAdapter : RecyclerView.Adapter<ComingSoonAdapter.ComingSoonViewHolder>() {
+class ComingSoonAdapter(private val showMovieDetails: (String) -> Unit) :
+    RecyclerView.Adapter<ComingSoonAdapter.ComingSoonViewHolder>() {
 
     private var comingSoonMovies: List<Movie> = emptyList()
 
@@ -22,6 +23,12 @@ class ComingSoonAdapter : RecyclerView.Adapter<ComingSoonAdapter.ComingSoonViewH
     inner class ComingSoonViewHolder(private val comingSoonBinding: DefaultMovieCardBinding) :
         RecyclerView.ViewHolder(comingSoonBinding.root) {
         private val comingSoonMovie get() = comingSoonMovies[bindingAdapterPosition]
+
+        init {
+            comingSoonBinding.movieCard.setOnClickListener {
+                showMovieDetails(comingSoonMovie.id)
+            }
+        }
 
         fun bindData() {
             comingSoonBinding.apply {

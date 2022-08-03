@@ -9,7 +9,8 @@ import com.iti.android.zoz.pop_flake.data.pojos.SearchResult
 import com.iti.android.zoz.pop_flake.databinding.DefaultMovieCardBinding
 
 
-class SearchingAdapter : RecyclerView.Adapter<SearchingAdapter.SearchViewHolder>() {
+class SearchingAdapter(private val showMovieDetails: (String) -> Unit) :
+    RecyclerView.Adapter<SearchingAdapter.SearchViewHolder>() {
     private var searchingList: List<SearchResult> = emptyList()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -21,6 +22,13 @@ class SearchingAdapter : RecyclerView.Adapter<SearchingAdapter.SearchViewHolder>
     inner class SearchViewHolder(private val searchBinding: DefaultMovieCardBinding) :
         RecyclerView.ViewHolder(searchBinding.root) {
         private val movie get() = searchingList[bindingAdapterPosition]
+
+        init {
+            searchBinding.movieCard.setOnClickListener {
+                showMovieDetails(movie.id)
+            }
+        }
+
         fun bindData() {
             searchBinding.apply {
                 txtFilmName.text = movie.title

@@ -19,4 +19,5 @@
     <string name="there_is_no_result">There is no result</string>
     <string name="no_trailer_found">No trailer found!</string>
     <string name="movie_trailer">Movie trailer</string>
+    <string name="details">Details</string>
 </resources>

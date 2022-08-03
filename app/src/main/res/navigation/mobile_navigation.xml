@@ -19,13 +19,32 @@
             app:popExitAnim="@android:anim/fade_out"
             app:popUpTo="@id/navigation_home"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_navigation_home_to_movieDetailsWebView"
+            app:destination="@id/movieDetailsWebView"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_search"
         android:name="com.iti.android.zoz.pop_flake.ui.search.view.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_navigation_search_to_movieDetailsWebView"
+            app:destination="@id/movieDetailsWebView"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/navigation_search"
+            app:popUpToInclusive="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_settings"
@@ -37,6 +56,16 @@
         android:name="com.iti.android.zoz.pop_flake.ui.trailer.MovieTrailer"
         android:label="@string/movie_trailer"
         tools:layout="@layout/fragment_movie_trailer">
+        <argument
+            android:name="movie_id"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieDetailsWebView"
+        android:name="com.iti.android.zoz.pop_flake.ui.moviedetails.MovieDetailsWebView"
+        android:label="@string/details"
+        tools:layout="@layout/fragment_movie_details_web_view">
         <argument
             android:name="movie_id"
             app:argType="string"

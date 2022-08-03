@@ -86,7 +86,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initializeBoxOfficeAdapter() {
-        _boxOfficeAdapter = BoxOfficeAdapter()
+        _boxOfficeAdapter = BoxOfficeAdapter(showMovieDetails)
         binding.boxOfficeRecyclerview.apply {
             layoutManager = GridLayoutManager(
                 requireContext(),
@@ -99,7 +99,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initializeTopRatedAdapter() {
-        _topRatedAdapter = TopRatedAdapter()
+        _topRatedAdapter = TopRatedAdapter(showMovieDetails)
         binding.topRatedRecyclerview.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
@@ -108,7 +108,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initializeInTheatersAdapter() {
-        _inTheatersAdapter = InTheaterAdapter()
+        _inTheatersAdapter = InTheaterAdapter(showMovieDetails)
         binding.inTheatersRecyclerview.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
@@ -117,7 +117,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initializeComingSoonAdapter() {
-        _comingSoonAdapter = ComingSoonAdapter()
+        _comingSoonAdapter = ComingSoonAdapter(showMovieDetails)
         binding.comingSoonRecyclerview.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
@@ -243,6 +243,12 @@ class HomeFragment : Fragment() {
     private val showTrailer: (String) -> Unit = { movieId ->
         findNavController().navigate(
             HomeFragmentDirections.actionNavigationHomeToMovieTrailer(movieId)
+        )
+    }
+
+    private val showMovieDetails: (String) -> Unit = { movieId ->
+        findNavController().navigate(
+            HomeFragmentDirections.actionNavigationHomeToMovieDetailsWebView(movieId)
         )
     }
 

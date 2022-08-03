@@ -8,7 +8,8 @@ import com.bumptech.glide.Glide
 import com.iti.android.zoz.pop_flake.data.pojos.Movie
 import com.iti.android.zoz.pop_flake.databinding.RatedMovieCardBinding
 
-class InTheaterAdapter : RecyclerView.Adapter<InTheaterAdapter.InTheaterViewHolder>() {
+class InTheaterAdapter(private val showMovieDetails: (String) -> Unit) :
+    RecyclerView.Adapter<InTheaterAdapter.InTheaterViewHolder>() {
 
     private var inTheaterMovies: List<Movie> = emptyList()
 
@@ -21,6 +22,12 @@ class InTheaterAdapter : RecyclerView.Adapter<InTheaterAdapter.InTheaterViewHold
     inner class InTheaterViewHolder(private val ratingFilmBinding: RatedMovieCardBinding) :
         RecyclerView.ViewHolder(ratingFilmBinding.root) {
         private val inTheaterMovie get() = inTheaterMovies[bindingAdapterPosition]
+
+        init {
+            ratingFilmBinding.movieCard.setOnClickListener {
+                showMovieDetails(inTheaterMovie.id)
+            }
+        }
 
         fun bindData() {
             ratingFilmBinding.apply {
