@@ -64,7 +64,11 @@ class SearchFragment : Fragment() {
             binding.edtSearch.getQueryTextChangeStateFlow()
                 .debounce(500L)
                 .filter { query ->
-                    return@filter query.isNotEmpty()
+                    return@filter if (query.isEmpty()) {
+                        searchingAdapter.setSearchingList(emptyList())
+                        false
+                    } else
+                        true
                 }.distinctUntilChanged()
                 .collect { query ->
                     searchingAdapter.setSearchingList(emptyList())
