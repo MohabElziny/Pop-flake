@@ -1,17 +1,18 @@
 package com.iti.android.zoz.pop_flake.data.repository
 
 import com.iti.android.zoz.pop_flake.data.NetworkResponse
+import com.iti.android.zoz.pop_flake.data.datasource.local.ILocalDataSource
 import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMovie
 import com.iti.android.zoz.pop_flake.data.pojos.Movie
 import com.iti.android.zoz.pop_flake.data.pojos.SearchResult
 import com.iti.android.zoz.pop_flake.data.pojos.TopMovie
-import com.iti.android.zoz.pop_flake.data.remotedatasource.IRemoteDataSource
+import com.iti.android.zoz.pop_flake.data.datasource.remote.IRemoteDataSource
+import com.iti.android.zoz.pop_flake.utils.CONNECTION_FAILURE
 import javax.inject.Inject
 
-private const val connectionFailure = "Bad Connection"
-
 class Repository @Inject constructor(
-    private val remoteDataSource: IRemoteDataSource
+    private val remoteDataSource: IRemoteDataSource,
+    private val localDataSource: ILocalDataSource
 ) : IRepository {
     override suspend fun getComingSoonMovies(): NetworkResponse<List<Movie>> {
         return try {
@@ -26,7 +27,7 @@ class Repository @Inject constructor(
                 NetworkResponse.FailureResponse(response.errorBody().toString())
             }
         } catch (ex: Exception) {
-            NetworkResponse.FailureResponse(connectionFailure)
+            NetworkResponse.FailureResponse(CONNECTION_FAILURE)
         }
     }
 
@@ -43,7 +44,7 @@ class Repository @Inject constructor(
                 NetworkResponse.FailureResponse(response.errorBody().toString())
             }
         } catch (ex: Exception) {
-            NetworkResponse.FailureResponse(connectionFailure)
+            NetworkResponse.FailureResponse(CONNECTION_FAILURE)
         }
     }
 
@@ -60,7 +61,7 @@ class Repository @Inject constructor(
                 NetworkResponse.FailureResponse(response.errorBody().toString())
             }
         } catch (ex: Exception) {
-            NetworkResponse.FailureResponse(connectionFailure)
+            NetworkResponse.FailureResponse(CONNECTION_FAILURE)
         }
     }
 
@@ -77,7 +78,7 @@ class Repository @Inject constructor(
                 NetworkResponse.FailureResponse(response.errorBody().toString())
             }
         } catch (ex: Exception) {
-            NetworkResponse.FailureResponse(connectionFailure)
+            NetworkResponse.FailureResponse(CONNECTION_FAILURE)
         }
     }
 
@@ -94,7 +95,11 @@ class Repository @Inject constructor(
                 NetworkResponse.FailureResponse(response.errorBody().toString())
             }
         } catch (ex: Exception) {
-            NetworkResponse.FailureResponse(connectionFailure)
+            NetworkResponse.FailureResponse(CONNECTION_FAILURE)
         }
     }
+
+    override fun getThemeMode(): Int = localDataSource.getThemeMode()
+
+    override fun setThemeMode(themeMode: Int) = localDataSource.setThemeMode(themeMode)
 }

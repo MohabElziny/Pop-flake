@@ -1,4 +1,4 @@
-package com.iti.android.zoz.pop_flake.data.remotedatasource
+package com.iti.android.zoz.pop_flake.data.datasource.remote
 
 import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMoviesResponse
 import com.iti.android.zoz.pop_flake.data.pojos.MoviesResponse

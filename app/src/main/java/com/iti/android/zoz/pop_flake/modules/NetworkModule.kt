@@ -1,6 +1,7 @@
 package com.iti.android.zoz.pop_flake.modules
 
-import com.iti.android.zoz.pop_flake.data.remotedatasource.NetworkService
+import com.iti.android.zoz.pop_flake.data.datasource.remote.NetworkService
+import com.iti.android.zoz.pop_flake.utils.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +16,7 @@ object NetworkModule {
     fun provideRetrofitInstance(): Retrofit =
         Retrofit.Builder().apply {
             addConverterFactory(GsonConverterFactory.create())
-            baseUrl("https://imdb-api.com/en/API/")
+            baseUrl(BASE_URL)
         }.build()
 
     @Provides

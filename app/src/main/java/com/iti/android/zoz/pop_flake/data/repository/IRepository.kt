@@ -17,4 +17,7 @@ interface IRepository {
 
     suspend fun webSearchQuery(query: String): NetworkResponse<List<SearchResult>>
 
+    fun getThemeMode(): Int
+
+    fun setThemeMode(themeMode: Int)
 }
