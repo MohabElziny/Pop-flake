@@ -2,6 +2,7 @@ package com.iti.android.zoz.pop_flake.data.remotedatasource
 
 import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMoviesResponse
 import com.iti.android.zoz.pop_flake.data.pojos.MoviesResponse
+import com.iti.android.zoz.pop_flake.data.pojos.SearchResponse
 import com.iti.android.zoz.pop_flake.data.pojos.TopMoviesResponse
 import retrofit2.Response
 import javax.inject.Inject
@@ -20,4 +21,7 @@ class RemoteDataSource @Inject constructor(
 
     override suspend fun getBoxOfficeMovies(): Response<BoxOfficeMoviesResponse> =
         networkService.getBoxOfficeMovies()
+
+    override suspend fun webSearchQuery(query: String): Response<SearchResponse> =
+        networkService.webSearchQuery(query)
 }

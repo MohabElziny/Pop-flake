@@ -1,4 +1,4 @@
-package com.iti.android.zoz.pop_flake.ui.home
+package com.iti.android.zoz.pop_flake.ui.home.view
 
 import android.os.Bundle
 import android.view.LayoutInflater

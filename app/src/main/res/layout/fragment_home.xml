@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment"
+    tools:context=".ui.home.view.HomeFragment"
     tools:ignore="SpeakableTextPresentCheck">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -106,7 +106,7 @@
             app:layout_constraintStart_toStartOf="@id/txt_top_rated"
             app:layout_constraintTop_toBottomOf="@id/txt_top_rated"
             tools:itemCount="1"
-            tools:listitem="@layout/film_with_rating_card"
+            tools:listitem="@layout/rated_movie_card"
             tools:orientation="horizontal" />
 
         <TextView
@@ -130,6 +130,6 @@
             app:layout_constraintStart_toStartOf="@id/txt_box_office"
             app:layout_constraintTop_toBottomOf="@id/txt_box_office"
             tools:itemCount="1"
-            tools:listitem="@layout/box_office_film_card" />
+            tools:listitem="@layout/default_movie_card" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

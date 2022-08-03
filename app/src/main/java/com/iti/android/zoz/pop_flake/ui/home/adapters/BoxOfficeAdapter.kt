@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iti.android.zoz.pop_flake.R
-import com.iti.android.zoz.pop_flake.databinding.BoxOfficeFilmCardBinding
 import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMovie
+import com.iti.android.zoz.pop_flake.databinding.DefaultMovieCardBinding
 
 class BoxOfficeAdapter : RecyclerView.Adapter<BoxOfficeAdapter.BoxOfficeViewHolder>() {
 
@@ -19,7 +19,7 @@ class BoxOfficeAdapter : RecyclerView.Adapter<BoxOfficeAdapter.BoxOfficeViewHold
         notifyDataSetChanged()
     }
 
-    inner class BoxOfficeViewHolder(private val boxOfficeBinding: BoxOfficeFilmCardBinding) :
+    inner class BoxOfficeViewHolder(private val boxOfficeBinding: DefaultMovieCardBinding) :
         RecyclerView.ViewHolder(boxOfficeBinding.root) {
         private val boxOfficeMovie get() = boxOfficeMovies[bindingAdapterPosition]
 
@@ -37,7 +37,7 @@ class BoxOfficeAdapter : RecyclerView.Adapter<BoxOfficeAdapter.BoxOfficeViewHold
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoxOfficeViewHolder =
         BoxOfficeViewHolder(
-            BoxOfficeFilmCardBinding.inflate(
+            DefaultMovieCardBinding.inflate(
                 LayoutInflater.from(parent.context)
             )
         )

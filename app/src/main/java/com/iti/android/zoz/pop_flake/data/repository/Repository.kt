@@ -3,6 +3,7 @@ package com.iti.android.zoz.pop_flake.data.repository
 import com.iti.android.zoz.pop_flake.data.NetworkResponse
 import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMovie
 import com.iti.android.zoz.pop_flake.data.pojos.Movie
+import com.iti.android.zoz.pop_flake.data.pojos.SearchResult
 import com.iti.android.zoz.pop_flake.data.pojos.TopMovie
 import com.iti.android.zoz.pop_flake.data.remotedatasource.IRemoteDataSource
 import javax.inject.Inject
@@ -71,6 +72,23 @@ class Repository @Inject constructor(
                     NetworkResponse.FailureResponse(response.body()?.errorMessage.toString())
                 } else {
                     NetworkResponse.SuccessResponse(response.body()?.boxOfficeMovies ?: emptyList())
+                }
+            } else {
+                NetworkResponse.FailureResponse(response.errorBody().toString())
+            }
+        } catch (ex: Exception) {
+            NetworkResponse.FailureResponse(connectionFailure)
+        }
+    }
+
+    override suspend fun webSearchQuery(query: String): NetworkResponse<List<SearchResult>> {
+        return try {
+            val response = remoteDataSource.webSearchQuery(query.replace(" ", "%"))
+            if (response.isSuccessful) {
+                if (response.body()?.results.isNullOrEmpty()) {
+                    NetworkResponse.FailureResponse(response.body()?.errorMessage.toString())
+                } else {
+                    NetworkResponse.SuccessResponse(response.body()?.results ?: emptyList())
                 }
             } else {
                 NetworkResponse.FailureResponse(response.errorBody().toString())

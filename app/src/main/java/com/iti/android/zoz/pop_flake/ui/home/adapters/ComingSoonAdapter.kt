@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iti.android.zoz.pop_flake.R
-import com.iti.android.zoz.pop_flake.databinding.BoxOfficeFilmCardBinding
 import com.iti.android.zoz.pop_flake.data.pojos.Movie
+import com.iti.android.zoz.pop_flake.databinding.DefaultMovieCardBinding
 
 class ComingSoonAdapter : RecyclerView.Adapter<ComingSoonAdapter.ComingSoonViewHolder>() {
 
@@ -19,7 +19,7 @@ class ComingSoonAdapter : RecyclerView.Adapter<ComingSoonAdapter.ComingSoonViewH
         notifyDataSetChanged()
     }
 
-    inner class ComingSoonViewHolder(private val comingSoonBinding: BoxOfficeFilmCardBinding) :
+    inner class ComingSoonViewHolder(private val comingSoonBinding: DefaultMovieCardBinding) :
         RecyclerView.ViewHolder(comingSoonBinding.root) {
         private val comingSoonMovie get() = comingSoonMovies[bindingAdapterPosition]
 
@@ -38,7 +38,7 @@ class ComingSoonAdapter : RecyclerView.Adapter<ComingSoonAdapter.ComingSoonViewH
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComingSoonViewHolder =
         ComingSoonViewHolder(
-            BoxOfficeFilmCardBinding.inflate(
+            DefaultMovieCardBinding.inflate(
                 LayoutInflater.from(parent.context)
             )
         )

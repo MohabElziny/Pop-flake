@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.iti.android.zoz.pop_flake.R
-import com.iti.android.zoz.pop_flake.databinding.FilmWithRatingCardBinding
 import com.iti.android.zoz.pop_flake.data.pojos.TopMovie
+import com.iti.android.zoz.pop_flake.databinding.RatedMovieCardBinding
 
 class TopRatedAdapter : RecyclerView.Adapter<TopRatedAdapter.TopRatedViewHolder>() {
 
@@ -19,7 +19,7 @@ class TopRatedAdapter : RecyclerView.Adapter<TopRatedAdapter.TopRatedViewHolder>
         notifyDataSetChanged()
     }
 
-    inner class TopRatedViewHolder(private val topRatedBinding: FilmWithRatingCardBinding) :
+    inner class TopRatedViewHolder(private val topRatedBinding: RatedMovieCardBinding) :
         RecyclerView.ViewHolder(topRatedBinding.root) {
         private val topRatedMovie get() = topRatedMovies[bindingAdapterPosition]
 
@@ -39,7 +39,7 @@ class TopRatedAdapter : RecyclerView.Adapter<TopRatedAdapter.TopRatedViewHolder>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopRatedViewHolder =
         TopRatedViewHolder(
-            FilmWithRatingCardBinding.inflate(
+            RatedMovieCardBinding.inflate(
                 LayoutInflater.from(parent.context)
             )
         )

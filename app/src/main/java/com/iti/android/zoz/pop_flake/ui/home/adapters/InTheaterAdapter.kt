@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.iti.android.zoz.pop_flake.databinding.FilmWithRatingCardBinding
 import com.iti.android.zoz.pop_flake.data.pojos.Movie
+import com.iti.android.zoz.pop_flake.databinding.RatedMovieCardBinding
 
 class InTheaterAdapter : RecyclerView.Adapter<InTheaterAdapter.InTheaterViewHolder>() {
 
@@ -18,7 +18,7 @@ class InTheaterAdapter : RecyclerView.Adapter<InTheaterAdapter.InTheaterViewHold
         notifyDataSetChanged()
     }
 
-    inner class InTheaterViewHolder(private val ratingFilmBinding: FilmWithRatingCardBinding) :
+    inner class InTheaterViewHolder(private val ratingFilmBinding: RatedMovieCardBinding) :
         RecyclerView.ViewHolder(ratingFilmBinding.root) {
         private val inTheaterMovie get() = inTheaterMovies[bindingAdapterPosition]
 
@@ -36,7 +36,7 @@ class InTheaterAdapter : RecyclerView.Adapter<InTheaterAdapter.InTheaterViewHold
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InTheaterViewHolder =
         InTheaterViewHolder(
-            FilmWithRatingCardBinding.inflate(
+            RatedMovieCardBinding.inflate(
                 LayoutInflater.from(parent.context)
             )
         )

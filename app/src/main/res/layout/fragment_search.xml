@@ -4,29 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.search.SearchFragment">
+    tools:context=".ui.search.view.SearchFragment">
 
-    <androidx.appcompat.widget.SearchView
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_12sdp"
         android:ems="10"
+        android:hint="@string/title_search"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/ic_baseline_search_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searching_recycling_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_12sdp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/search"
+        app:layout_constraintStart_toStartOf="@id/search"
         app:layout_constraintTop_toBottomOf="@id/search"
         app:layout_constraintVertical_bias="0.0"
         tools:itemCount="3"
-        tools:listitem="@layout/film_with_rating_card" />
+        tools:listitem="@layout/rated_movie_card" />
+
+    <ProgressBar
+        android:id="@+id/searching_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
