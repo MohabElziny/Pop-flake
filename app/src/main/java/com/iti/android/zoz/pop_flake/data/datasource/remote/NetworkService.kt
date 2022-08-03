@@ -1,6 +1,6 @@
 package com.iti.android.zoz.pop_flake.data.datasource.remote
 
-import com.iti.android.zoz.pop_flake.BuildConfig
+import com.iti.android.zoz.pop_flake.BuildConfig.API_KEY
 import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMoviesResponse
 import com.iti.android.zoz.pop_flake.data.pojos.MoviesResponse
 import com.iti.android.zoz.pop_flake.data.pojos.SearchResponse
@@ -8,8 +8,6 @@ import com.iti.android.zoz.pop_flake.data.pojos.TopMoviesResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
-
-private const val API_KEY = BuildConfig.API_KEY
 
 interface NetworkService {
     @GET("ComingSoon/$API_KEY")
