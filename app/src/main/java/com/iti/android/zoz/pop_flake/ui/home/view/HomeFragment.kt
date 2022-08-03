@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,7 +68,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initializeTrailerViewPagerAdapter() {
-        _trailersAdapter = TrailerViewPagerAdapter()
+        _trailersAdapter = TrailerViewPagerAdapter(showTrailer)
         binding.viewPager2.apply {
             adapter = trailersAdapter
             binding.wormDotsIndicator.attachTo(this)
@@ -237,6 +238,12 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private val showTrailer: (String) -> Unit = { movieId ->
+        findNavController().navigate(
+            HomeFragmentDirections.actionNavigationHomeToMovieTrailer(movieId)
+        )
     }
 
     override fun onDestroyView() {

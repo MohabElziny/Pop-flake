@@ -27,4 +27,7 @@ class RemoteDataSource @Inject constructor(
 
     override suspend fun getMoviePoster(movie_id: String): Response<PosterResponse> =
         networkService.getMoviePoster(movie_id)
+
+    override suspend fun getMovieTrailer(movie_id: String): Response<MovieTrailer> =
+        networkService.getMovieTrailer(movie_id)
 }

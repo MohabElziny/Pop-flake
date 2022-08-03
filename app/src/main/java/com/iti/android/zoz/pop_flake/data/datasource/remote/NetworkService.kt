@@ -27,6 +27,11 @@ interface NetworkService {
         @Path("movie_id") movie_id: String
     ): Response<PosterResponse>
 
+    @GET("Trailer/$API_KEY/{movie_id}")
+    suspend fun getMovieTrailer(
+        @Path("movie_id") movie_id: String
+    ): Response<MovieTrailer>
+
     @GET("SearchTitle/$API_KEY/{query}")
     suspend fun webSearchQuery(
         @Path("query") query: String

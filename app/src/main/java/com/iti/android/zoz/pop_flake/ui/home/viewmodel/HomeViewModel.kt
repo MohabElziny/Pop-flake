@@ -80,7 +80,7 @@ class HomeViewModel @Inject constructor(
                 if (response.data.isEmpty())
                     _postersList.postValue(emptyList())
                 else if (response.data.size > 5) {
-                    for (i in 0 until 6)
+                    for (i in 0 until 5)
                         getPostersList(response.data[i])
                     _postersList.postValue(posterList)
                 } else {

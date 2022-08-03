@@ -16,4 +16,6 @@
     <string name="no_top_rated_movies">No top rated movies</string>
     <string name="no_box_office_movies">No box office movies</string>
     <string name="there_is_no_result">There is no result</string>
+    <string name="no_trailer_found">No trailer found!</string>
+    <string name="movie_trailer">Movie trailer</string>
 </resources>

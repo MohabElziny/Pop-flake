@@ -1,12 +1,7 @@
 package com.iti.android.zoz.pop_flake.data.repository
 
 import com.iti.android.zoz.pop_flake.data.NetworkResponse
-import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMovie
-import com.iti.android.zoz.pop_flake.data.pojos.Movie
-import com.iti.android.zoz.pop_flake.data.pojos.SearchResult
-import com.iti.android.zoz.pop_flake.data.pojos.TopMovie
-import com.iti.android.zoz.pop_flake.data.pojos.MostPopularMovie
-import com.iti.android.zoz.pop_flake.data.pojos.Poster
+import com.iti.android.zoz.pop_flake.data.pojos.*
 
 interface IRepository {
     suspend fun getComingSoonMovies(): NetworkResponse<List<Movie>>
@@ -20,6 +15,8 @@ interface IRepository {
     suspend fun getMostPopularMovies(): NetworkResponse<List<MostPopularMovie>>
 
     suspend fun getMoviePoster(movie_id: String): NetworkResponse<Poster>
+
+    suspend fun getMovieTrailer(movie_id: String): NetworkResponse<MovieTrailer>
 
     suspend fun webSearchQuery(query: String): NetworkResponse<List<SearchResult>>
 

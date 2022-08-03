@@ -9,7 +9,17 @@
         android:id="@+id/navigation_home"
         android:name="com.iti.android.zoz.pop_flake.ui.home.view.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_movieTrailer"
+            app:destination="@id/movieTrailer"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
+            app:popUpTo="@id/navigation_home"
+            app:popUpToInclusive="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_search"
@@ -22,4 +32,14 @@
         android:name="com.iti.android.zoz.pop_flake.ui.settings.view.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/movieTrailer"
+        android:name="com.iti.android.zoz.pop_flake.ui.trailer.MovieTrailer"
+        android:label="@string/movie_trailer"
+        tools:layout="@layout/fragment_movie_trailer">
+        <argument
+            android:name="movie_id"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
 </navigation>

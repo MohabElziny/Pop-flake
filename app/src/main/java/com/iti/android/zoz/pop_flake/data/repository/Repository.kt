@@ -105,8 +105,29 @@ class Repository @Inject constructor(
                 if (response.body()?.posters.isNullOrEmpty()) {
                     NetworkResponse.FailureResponse(response.body()?.errorMessage.toString())
                 } else {
+                    val poster = response.body()?.posters?.get(0)
+                    poster?.id = response.body()?.id ?: ""
                     NetworkResponse.SuccessResponse(
-                        response.body()?.posters?.get(0) ?: Poster("", "")
+                        poster ?: Poster("", "")
+                    )
+                }
+            } else {
+                NetworkResponse.FailureResponse(response.errorBody().toString())
+            }
+        } catch (ex: Exception) {
+            NetworkResponse.FailureResponse(CONNECTION_FAILURE)
+        }
+    }
+
+    override suspend fun getMovieTrailer(movie_id: String): NetworkResponse<MovieTrailer> {
+        return try {
+            val response = remoteDataSource.getMovieTrailer(movie_id)
+            if (response.isSuccessful) {
+                if (!response.body()?.errorMessage.isNullOrEmpty()) {
+                    NetworkResponse.FailureResponse(response.body()?.errorMessage.toString())
+                } else {
+                    NetworkResponse.SuccessResponse(
+                        response.body() ?: MovieTrailer("", "", "", "")
                     )
                 }
             } else {

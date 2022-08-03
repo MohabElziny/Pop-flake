@@ -8,7 +8,8 @@ import com.bumptech.glide.Glide
 import com.iti.android.zoz.pop_flake.databinding.PosterTrailerLayoutBinding
 import com.iti.android.zoz.pop_flake.data.pojos.Poster
 
-class TrailerViewPagerAdapter : RecyclerView.Adapter<TrailerViewPagerAdapter.TrailerViewHolder>() {
+class TrailerViewPagerAdapter(private val showTrailer: (String) -> Unit) :
+    RecyclerView.Adapter<TrailerViewPagerAdapter.TrailerViewHolder>() {
     private var postersList: List<Poster> = emptyList()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -20,6 +21,13 @@ class TrailerViewPagerAdapter : RecyclerView.Adapter<TrailerViewPagerAdapter.Tra
     inner class TrailerViewHolder(private val posterTrailerBinding: PosterTrailerLayoutBinding) :
         RecyclerView.ViewHolder(posterTrailerBinding.root) {
         private val poster get() = postersList[bindingAdapterPosition]
+
+        init {
+            posterTrailerBinding.imageButton.setOnClickListener {
+                showTrailer(poster.id)
+            }
+        }
+
         fun bindData() {
             Glide.with(posterTrailerBinding.root.context)
                 .load(poster.image)
