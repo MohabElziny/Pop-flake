@@ -23,6 +23,7 @@ class TrailerViewPagerAdapter : RecyclerView.Adapter<TrailerViewPagerAdapter.Tra
         fun bindData() {
             Glide.with(posterTrailerBinding.root.context)
                 .load(poster.image)
+                .fitCenter()
                 .into(posterTrailerBinding.imgPoster)
         }
     }

@@ -1,10 +1,7 @@
 package com.iti.android.zoz.pop_flake.data.datasource.remote
 
 import com.iti.android.zoz.pop_flake.BuildConfig.API_KEY
-import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMoviesResponse
-import com.iti.android.zoz.pop_flake.data.pojos.MoviesResponse
-import com.iti.android.zoz.pop_flake.data.pojos.SearchResponse
-import com.iti.android.zoz.pop_flake.data.pojos.TopMoviesResponse
+import com.iti.android.zoz.pop_flake.data.pojos.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -21,6 +18,14 @@ interface NetworkService {
 
     @GET("BoxOffice/$API_KEY")
     suspend fun getBoxOfficeMovies(): Response<BoxOfficeMoviesResponse>
+
+    @GET("MostPopularMovies/$API_KEY")
+    suspend fun getMostPopularMovies(): Response<MostPopularMoviesResponse>
+
+    @GET("Posters/$API_KEY/{movie_id}")
+    suspend fun getMoviePoster(
+        @Path("movie_id") movie_id: String
+    ): Response<PosterResponse>
 
     @GET("SearchTitle/$API_KEY/{query}")
     suspend fun webSearchQuery(

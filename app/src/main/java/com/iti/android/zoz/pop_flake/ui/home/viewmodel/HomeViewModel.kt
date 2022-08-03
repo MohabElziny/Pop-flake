@@ -6,10 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iti.android.zoz.pop_flake.data.NetworkResponse
 import com.iti.android.zoz.pop_flake.data.ResultState
-import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMovie
-import com.iti.android.zoz.pop_flake.data.pojos.Movie
-import com.iti.android.zoz.pop_flake.data.pojos.Poster
-import com.iti.android.zoz.pop_flake.data.pojos.TopMovie
+import com.iti.android.zoz.pop_flake.data.pojos.*
 import com.iti.android.zoz.pop_flake.data.repository.IRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -24,6 +21,7 @@ class HomeViewModel @Inject constructor(
 
     private lateinit var swapJob: Job
     private var currentPosition = 0
+    private val posterList: MutableList<Poster> = mutableListOf()
 
     private val _postersList: MutableLiveData<List<Poster>> = MutableLiveData()
     val postersList: LiveData<List<Poster>>
@@ -57,10 +55,42 @@ class HomeViewModel @Inject constructor(
     fun getMovies() {
         counting = 0
         _receivedAllData.value = false
+        posterList.clear()
+        getMostPopularMovies()
         getComingSoonMovies()
         getInTheaterMovies()
         getTopRatedMovies()
         getBoxOfficeMovies()
+    }
+
+    private fun getMostPopularMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val mostPopularMovieResponse = async { repository.getMostPopularMovies() }
+            getMostPopularMoviesPosters(mostPopularMovieResponse.await())
+        }
+    }
+
+    private fun getMostPopularMoviesPosters(response: NetworkResponse<List<MostPopularMovie>>) {
+        when (response) {
+            is NetworkResponse.FailureResponse -> {
+                _postersList.postValue(emptyList())
+                increaseCounting()
+            }
+            is NetworkResponse.SuccessResponse -> {
+                if (response.data.isEmpty())
+                    _postersList.postValue(emptyList())
+                else if (response.data.size > 5) {
+                    for (i in 0 until 6)
+                        getPostersList(response.data[i])
+                    _postersList.postValue(posterList)
+                } else {
+                    for (i in 0 until response.data.size)
+                        getPostersList(response.data[i])
+                    _postersList.postValue(posterList)
+                }
+                increaseCounting()
+            }
+        }
     }
 
     private fun getComingSoonMovies() {
@@ -147,8 +177,21 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getPostersList() {
-        _postersList.value = posterList
+    private fun getPostersList(mostPopularMovie: MostPopularMovie) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val posterResponse = async { repository.getMoviePoster(mostPopularMovie.id) }
+            handlePosterResponse(posterResponse.await())
+        }
+    }
+
+    private fun handlePosterResponse(response: NetworkResponse<Poster>) {
+        when (response) {
+            is NetworkResponse.FailureResponse -> {}
+            is NetworkResponse.SuccessResponse -> {
+                if (response.data.id.isNotEmpty())
+                    posterList.add(response.data)
+            }
+        }
     }
 
     fun startSwap() {
@@ -156,7 +199,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun stopSwap() {
-        swapJob.cancel()
+        if (::swapJob.isInitialized)
+            swapJob.cancel()
     }
 
     fun setManualViewPagerPosition(position: Int) {
@@ -176,16 +220,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun increaseCounting() {
-        counting++
-        if (counting == 4)
+        ++counting
+        if (counting == 5)
             _receivedAllData.postValue(true)
     }
-
-    private val posterList: List<Poster> = listOf(
-        Poster("https://imdb-api.com/posters/original/8IB2e4r4oVhHnANbnm7O3Tj6tF8.jpg"),
-        Poster("https://imdb-api.com/posters/original/yI6X2cCM5YPJtxMhUd3dPGqDAhw.jpg"),
-        Poster("https://imdb-api.com/posters/original/og6S0aTZU6YUJAbqxeKjCa3kY1E.jpg"),
-        Poster("https://imdb-api.com/posters/original/8IB2e4r4oVhHnANbnm7O3Tj6tF8.jpg"),
-        Poster("https://imdb-api.com/posters/original/og6S0aTZU6YUJAbqxeKjCa3kY1E.jpg"),
-    )
 }

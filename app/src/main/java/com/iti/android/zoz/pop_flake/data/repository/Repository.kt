@@ -2,11 +2,8 @@ package com.iti.android.zoz.pop_flake.data.repository
 
 import com.iti.android.zoz.pop_flake.data.NetworkResponse
 import com.iti.android.zoz.pop_flake.data.datasource.local.ILocalDataSource
-import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMovie
-import com.iti.android.zoz.pop_flake.data.pojos.Movie
-import com.iti.android.zoz.pop_flake.data.pojos.SearchResult
-import com.iti.android.zoz.pop_flake.data.pojos.TopMovie
 import com.iti.android.zoz.pop_flake.data.datasource.remote.IRemoteDataSource
+import com.iti.android.zoz.pop_flake.data.pojos.*
 import com.iti.android.zoz.pop_flake.utils.CONNECTION_FAILURE
 import javax.inject.Inject
 
@@ -73,6 +70,44 @@ class Repository @Inject constructor(
                     NetworkResponse.FailureResponse(response.body()?.errorMessage.toString())
                 } else {
                     NetworkResponse.SuccessResponse(response.body()?.boxOfficeMovies ?: emptyList())
+                }
+            } else {
+                NetworkResponse.FailureResponse(response.errorBody().toString())
+            }
+        } catch (ex: Exception) {
+            NetworkResponse.FailureResponse(CONNECTION_FAILURE)
+        }
+    }
+
+    override suspend fun getMostPopularMovies(): NetworkResponse<List<MostPopularMovie>> {
+        return try {
+            val response = remoteDataSource.getMostPopularMovies()
+            if (response.isSuccessful) {
+                if (response.body()?.mostPopularMovies.isNullOrEmpty()) {
+                    NetworkResponse.FailureResponse(response.body()?.errorMessage.toString())
+                } else {
+                    NetworkResponse.SuccessResponse(
+                        response.body()?.mostPopularMovies ?: emptyList()
+                    )
+                }
+            } else {
+                NetworkResponse.FailureResponse(response.errorBody().toString())
+            }
+        } catch (ex: Exception) {
+            NetworkResponse.FailureResponse(CONNECTION_FAILURE)
+        }
+    }
+
+    override suspend fun getMoviePoster(movie_id: String): NetworkResponse<Poster> {
+        return try {
+            val response = remoteDataSource.getMoviePoster(movie_id)
+            if (response.isSuccessful) {
+                if (response.body()?.posters.isNullOrEmpty()) {
+                    NetworkResponse.FailureResponse(response.body()?.errorMessage.toString())
+                } else {
+                    NetworkResponse.SuccessResponse(
+                        response.body()?.posters?.get(0) ?: Poster("", "")
+                    )
                 }
             } else {
                 NetworkResponse.FailureResponse(response.errorBody().toString())

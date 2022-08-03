@@ -1,9 +1,6 @@
 package com.iti.android.zoz.pop_flake.data.datasource.remote
 
-import com.iti.android.zoz.pop_flake.data.pojos.BoxOfficeMoviesResponse
-import com.iti.android.zoz.pop_flake.data.pojos.MoviesResponse
-import com.iti.android.zoz.pop_flake.data.pojos.SearchResponse
-import com.iti.android.zoz.pop_flake.data.pojos.TopMoviesResponse
+import com.iti.android.zoz.pop_flake.data.pojos.*
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -24,4 +21,10 @@ class RemoteDataSource @Inject constructor(
 
     override suspend fun webSearchQuery(query: String): Response<SearchResponse> =
         networkService.webSearchQuery(query)
+
+    override suspend fun getMostPopularMovies(): Response<MostPopularMoviesResponse> =
+        networkService.getMostPopularMovies()
+
+    override suspend fun getMoviePoster(movie_id: String): Response<PosterResponse> =
+        networkService.getMoviePoster(movie_id)
 }

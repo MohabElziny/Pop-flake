@@ -63,7 +63,6 @@ class HomeFragment : Fragment() {
         initializeBoxOfficeAdapter()
 
         homeViewModel.getMovies()
-        homeViewModel.getPostersList()
         homeViewModelObserve()
     }
 
