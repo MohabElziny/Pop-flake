@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.iti.android.zoz.pop_flake.databinding.FragmentSettingsBinding
@@ -21,8 +20,7 @@ import kotlinx.coroutines.flow.buffer
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
-    private val settingsViewModel: SettingsViewModel by viewModels()
-    private val args: SettingsFragmentArgs by navArgs()
+    private val settingsViewModel: SettingsViewModel by activityViewModels()
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
@@ -51,10 +49,6 @@ class SettingsFragment : Fragment() {
         handleSubmitButton()
 
         initializeComplaintListAdapter()
-
-        args.complaint?.let { complaint ->
-            settingsViewModel.addComplaint(complaint)
-        }
     }
 
     private fun initializeComplaintListAdapter() {

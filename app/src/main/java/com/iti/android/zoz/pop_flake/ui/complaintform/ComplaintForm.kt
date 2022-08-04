@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.iti.android.zoz.pop_flake.R
 import com.iti.android.zoz.pop_flake.data.pojos.Complaint
 import com.iti.android.zoz.pop_flake.databinding.FragmentComplaintFormBinding
+import com.iti.android.zoz.pop_flake.ui.settings.viewmodel.SettingsViewModel
 import com.iti.android.zoz.pop_flake.utils.showSnackBar
 import java.util.*
 
@@ -16,6 +18,7 @@ class ComplaintForm : Fragment() {
 
     private var _complaintFormBinding: FragmentComplaintFormBinding? = null
     private val complaintFormBinding get() = _complaintFormBinding!!
+    private val settingsViewModel: SettingsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,15 +50,14 @@ class ComplaintForm : Fragment() {
     }
 
     private fun handleSuccessPreparation(complaintMessage: String) {
-        findNavController().navigate(
-            ComplaintFormDirections.actionComplaintFormToNavigationSettings(
-                Complaint(
-                    Calendar.getInstance().timeInMillis,
-                    complaintFormBinding.edtFirstName.text.toString().trim(),
-                    complaintFormBinding.edtLastName.text.toString().trim(),
-                    complaintFormBinding.edtEmail.text.toString().trim(),
-                    complaintMessage
-                )
+        findNavController().popBackStack()
+        settingsViewModel.addComplaint(
+            Complaint(
+                Calendar.getInstance().timeInMillis,
+                complaintFormBinding.edtFirstName.text.toString().trim(),
+                complaintFormBinding.edtLastName.text.toString().trim(),
+                complaintFormBinding.edtEmail.text.toString().trim(),
+                complaintMessage
             )
         )
     }
