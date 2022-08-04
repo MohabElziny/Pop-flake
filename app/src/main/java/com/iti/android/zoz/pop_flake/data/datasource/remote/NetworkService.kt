@@ -1,7 +1,7 @@
 package com.iti.android.zoz.pop_flake.data.datasource.remote
 
+import com.iti.android.zoz.pop_flake.BuildConfig.API_KEY
 import com.iti.android.zoz.pop_flake.data.pojos.*
-import com.iti.android.zoz.pop_flake.utils.API_KEY
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
