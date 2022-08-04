@@ -50,7 +50,22 @@
         android:id="@+id/navigation_settings"
         android:name="com.iti.android.zoz.pop_flake.ui.settings.view.SettingsFragment"
         android:label="@string/title_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_navigation_settings_to_complaintForm"
+            app:destination="@id/complaintForm"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/navigation_settings"
+            app:popUpToInclusive="false" />
+        <argument
+            android:name="complaint"
+            app:argType="com.iti.android.zoz.pop_flake.data.pojos.Complaint"
+            android:defaultValue="@null"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/movieTrailer"
         android:name="com.iti.android.zoz.pop_flake.ui.trailer.MovieTrailer"
@@ -70,5 +85,20 @@
             android:name="movie_id"
             app:argType="string"
             app:nullable="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/complaintForm"
+        android:name="com.iti.android.zoz.pop_flake.ui.complaintform.ComplaintForm"
+        android:label="@string/complaint_form"
+        tools:layout="@layout/fragment_complaint_form">
+        <action
+            android:id="@+id/action_complaintForm_to_navigation_settings"
+            app:destination="@id/navigation_settings"
+            app:enterAnim="@android:anim/slide_out_right"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/slide_out_right"
+            app:popExitAnim="@android:anim/fade_out"
+            app:popUpTo="@id/navigation_settings"
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

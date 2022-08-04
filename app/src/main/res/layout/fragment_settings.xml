@@ -23,6 +23,47 @@
         android:text="@string/dark_mode"
         android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="@+id/dark_mode_switch"
+        app:layout_constraintEnd_toStartOf="@+id/dark_mode_switch"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dark_mode_switch" />
+
+    <TextView
+        android:id="@+id/textView2"
+        style="@style/heading3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_25sdp"
+        android:text="@string/do_you_have_any_problems"
+        android:textStyle="normal"
+        app:layout_constraintStart_toStartOf="@+id/txt_dark_mode"
+        app:layout_constraintTop_toBottomOf="@+id/txt_dark_mode" />
+
+    <Button
+        android:id="@+id/btn_submit"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/submit_now"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/textView2"
+        app:layout_constraintTop_toTopOf="@id/textView2" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/complaints_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/dark_mode_switch"
+        app:layout_constraintStart_toStartOf="@+id/txt_dark_mode"
+        app:layout_constraintTop_toBottomOf="@+id/btn_submit"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/complaint_card"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

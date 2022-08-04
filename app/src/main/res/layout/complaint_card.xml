@@ -5,15 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:clickable="true"
-    android:focusable="true"
+    android:clickable="false"
+    android:focusable="false"
     android:foreground="?selectableItemBackground"
     app:cardCornerRadius="@dimen/_6sdp"
     app:cardElevation="@dimen/_2sdp"
     app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/movie_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -21,44 +20,54 @@
         android:orientation="vertical"
         android:padding="@dimen/_6sdp">
 
-        <ImageView
-            android:id="@+id/img_film"
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_120sdp"
-            android:contentDescription="@string/film_image"
+        <TextView
+            android:id="@+id/txt_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textSize="@dimen/_11ssp"
+            android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_launcher_background" />
+            tools:text="Mohab Elziny" />
 
         <TextView
-            android:id="@+id/txt_film_name"
-            style="@style/heading3"
-            android:layout_width="match_parent"
+            android:id="@+id/txt_message"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_4sdp"
-            android:maxLines="2"
-            android:minLines="2"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:maxLines="4"
+            android:textSize="@dimen/_11ssp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_film"
-            tools:text="Nope" />
+            app:layout_constraintTop_toBottomOf="@id/txt_name"
+            tools:text="dasmdams" />
 
         <TextView
-            android:id="@+id/txt_more_details"
-            style="@style/heading3"
-            android:layout_width="wrap_content"
+            android:id="@+id/txt_time_date"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_4sdp"
-            android:textStyle="normal"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:maxLines="2"
+            android:textSize="@dimen/_11ssp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_message"
+            tools:text="12.00AM" />
+
+        <TextView
+            android:id="@+id/txt_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:maxLines="2"
+            android:textSize="@dimen/_11ssp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_film_name"
-            tools:text="2022" />
-
+            app:layout_constraintTop_toBottomOf="@id/txt_time_date"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="mmm@gmail.com" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.cardview.widget.CardView>

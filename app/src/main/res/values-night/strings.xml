@@ -20,4 +20,15 @@
     <string name="no_trailer_found">No trailer found!</string>
     <string name="movie_trailer">Movie trailer</string>
     <string name="details">Details</string>
+    <string name="submit_now">Submit now</string>
+    <string name="do_you_have_any_problems">Do you have any problems?</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="email">Email</string>
+    <string name="what_is_your_complaint_about">What is your complaint about?</string>
+    <string name="submit">Submit</string>
+    <string name="complaint_form">Complaint form</string>
+    <string name="complaint_message">Complaint message shouldn\'t be empty</string>
+    <string name="name">"Name: "</string>
+    <string name="anonymous">Anonymous</string>
 </resources>
