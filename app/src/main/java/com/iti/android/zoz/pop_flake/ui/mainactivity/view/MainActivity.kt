@@ -1,4 +1,4 @@
-package com.iti.android.zoz.pop_flake
+package com.iti.android.zoz.pop_flake.ui.mainactivity.view
 
 import android.os.Bundle
 import android.view.View
@@ -11,7 +11,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.iti.android.zoz.pop_flake.R
 import com.iti.android.zoz.pop_flake.databinding.ActivityMainBinding
+import com.iti.android.zoz.pop_flake.ui.mainactivity.viewmodel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

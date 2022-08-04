@@ -1,4 +1,4 @@
-package com.iti.android.zoz.pop_flake.modules
+package com.iti.android.zoz.pop_flake.utils.modules
 
 import com.iti.android.zoz.pop_flake.data.repository.IRepository
 import com.iti.android.zoz.pop_flake.data.repository.Repository

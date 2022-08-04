@@ -1,4 +1,4 @@
-package com.iti.android.zoz.pop_flake.modules
+package com.iti.android.zoz.pop_flake.utils.modules
 
 import com.iti.android.zoz.pop_flake.data.datasource.remote.NetworkService
 import com.iti.android.zoz.pop_flake.utils.BASE_URL

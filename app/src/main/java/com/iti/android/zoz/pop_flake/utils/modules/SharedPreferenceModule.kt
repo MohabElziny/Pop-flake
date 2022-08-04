@@ -1,4 +1,4 @@
-package com.iti.android.zoz.pop_flake.modules
+package com.iti.android.zoz.pop_flake.utils.modules
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -1,4 +1,4 @@
-package com.iti.android.zoz.pop_flake
+package com.iti.android.zoz.pop_flake.ui.mainactivity.viewmodel
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
