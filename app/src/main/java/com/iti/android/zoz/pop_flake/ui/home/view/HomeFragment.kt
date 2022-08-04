@@ -28,8 +28,8 @@ class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
 
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+    private var _homeBinding: FragmentHomeBinding? = null
+    private val homeBinding get() = _homeBinding!!
 
     private var _comingSoonAdapter: ComingSoonAdapter? = null
     private val comingSoonAdapter get() = _comingSoonAdapter!!
@@ -51,8 +51,8 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
+        _homeBinding = FragmentHomeBinding.inflate(inflater, container, false)
+        return homeBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,9 +70,9 @@ class HomeFragment : Fragment() {
 
     private fun initializeTrailerViewPagerAdapter() {
         _trailersAdapter = TrailerViewPagerAdapter(showTrailer)
-        binding.viewPager2.apply {
+        homeBinding.viewPager2.apply {
             adapter = trailersAdapter
-            binding.wormDotsIndicator.attachTo(this)
+            homeBinding.wormDotsIndicator.attachTo(this)
             val zoomOutPageTransformer = ZoomOutPageTransformer()
             setPageTransformer { page, position ->
                 zoomOutPageTransformer.transformPage(page, position)
@@ -88,7 +88,7 @@ class HomeFragment : Fragment() {
 
     private fun initializeBoxOfficeAdapter() {
         _boxOfficeAdapter = BoxOfficeAdapter(showMovieDetails)
-        binding.boxOfficeRecyclerview.apply {
+        homeBinding.boxOfficeRecyclerview.apply {
             layoutManager = GridLayoutManager(
                 requireContext(),
                 2,
@@ -101,7 +101,7 @@ class HomeFragment : Fragment() {
 
     private fun initializeTopRatedAdapter() {
         _topRatedAdapter = TopRatedAdapter(showMovieDetails)
-        binding.topRatedRecyclerview.apply {
+        homeBinding.topRatedRecyclerview.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             adapter = topRatedAdapter
@@ -110,7 +110,7 @@ class HomeFragment : Fragment() {
 
     private fun initializeInTheatersAdapter() {
         _inTheatersAdapter = InTheaterAdapter(showMovieDetails)
-        binding.inTheatersRecyclerview.apply {
+        homeBinding.inTheatersRecyclerview.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             adapter = inTheatersAdapter
@@ -119,7 +119,7 @@ class HomeFragment : Fragment() {
 
     private fun initializeComingSoonAdapter() {
         _comingSoonAdapter = ComingSoonAdapter(showMovieDetails)
-        binding.comingSoonRecyclerview.apply {
+        homeBinding.comingSoonRecyclerview.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
             adapter = comingSoonAdapter
@@ -127,9 +127,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun initializeSwipeRefresh() {
-        binding.swipeRefresh.setOnRefreshListener {
+        homeBinding.swipeRefresh.setOnRefreshListener {
             homeViewModel.getMovies()
-            binding.swipeRefresh.isRefreshing = true
+            homeBinding.swipeRefresh.isRefreshing = true
         }
     }
 
@@ -143,8 +143,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun posterObservation() {
-        binding.viewPager2.visibility = View.GONE
-        binding.wormDotsIndicator.visibility = View.GONE
+        homeBinding.viewPager2.visibility = View.GONE
+        homeBinding.wormDotsIndicator.visibility = View.GONE
         lifecycleScope.launch {
             homeViewModel.postersList.observe(viewLifecycleOwner) {
                 trailersAdapter.setPostersList(it)
@@ -153,7 +153,7 @@ class HomeFragment : Fragment() {
         }
         lifecycleScope.launch {
             homeViewModel.viewPagerPosition.observe(viewLifecycleOwner) {
-                binding.viewPager2.setCurrentItem(it, true)
+                homeBinding.viewPager2.setCurrentItem(it, true)
             }
         }
     }
@@ -165,8 +165,8 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_coming_soon_movies))
                     is ResultState.Error -> showSnackBar(comingSoonMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.swipeRefresh.isRefreshing = true
-                        binding.comingSoonRecyclerview.visibility = View.INVISIBLE
+                        homeBinding.swipeRefresh.isRefreshing = true
+                        homeBinding.comingSoonRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> comingSoonAdapter.setComingSoonMoviesList(
                         comingSoonMoviesResult.data
@@ -183,8 +183,8 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_in_theaters_movies))
                     is ResultState.Error -> showSnackBar(inTheatersMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.swipeRefresh.isRefreshing = true
-                        binding.inTheatersRecyclerview.visibility = View.INVISIBLE
+                        homeBinding.swipeRefresh.isRefreshing = true
+                        homeBinding.inTheatersRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> inTheatersAdapter.setInTheaterMoviesList(
                         inTheatersMoviesResult.data
@@ -201,8 +201,8 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_top_rated_movies))
                     is ResultState.Error -> showSnackBar(topRatedMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.swipeRefresh.isRefreshing = true
-                        binding.topRatedRecyclerview.visibility = View.INVISIBLE
+                        homeBinding.swipeRefresh.isRefreshing = true
+                        homeBinding.topRatedRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> topRatedAdapter.setTopRatedMoviesList(
                         topRatedMoviesResult.data
@@ -219,8 +219,8 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_box_office_movies))
                     is ResultState.Error -> showSnackBar(boxOfficeMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.swipeRefresh.isRefreshing = true
-                        binding.boxOfficeRecyclerview.visibility = View.INVISIBLE
+                        homeBinding.swipeRefresh.isRefreshing = true
+                        homeBinding.boxOfficeRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> boxOfficeAdapter.setBoxOfficeMoviesList(
                         boxOfficeMoviesResult.data
@@ -234,8 +234,8 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             homeViewModel.receivedAllData.observe(viewLifecycleOwner) { receivedAll ->
                 if (receivedAll) {
-                    binding.apply {
-                        binding.swipeRefresh.isRefreshing = false
+                    homeBinding.apply {
+                        homeBinding.swipeRefresh.isRefreshing = false
                         boxOfficeRecyclerview.visibility = View.VISIBLE
                         inTheatersRecyclerview.visibility = View.VISIBLE
                         comingSoonRecyclerview.visibility = View.VISIBLE
@@ -267,6 +267,6 @@ class HomeFragment : Fragment() {
         _inTheatersAdapter = null
         _comingSoonAdapter = null
         _boxOfficeAdapter = null
-        _binding = null
+        _homeBinding = null
     }
 }

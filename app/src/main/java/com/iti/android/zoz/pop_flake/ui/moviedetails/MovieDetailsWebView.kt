@@ -13,7 +13,6 @@ import androidx.navigation.fragment.navArgs
 import com.iti.android.zoz.pop_flake.databinding.FragmentMovieDetailsWebViewBinding
 import com.iti.android.zoz.pop_flake.utils.DETAILS_BASE_URL
 
-
 class MovieDetailsWebView : Fragment() {
 
     private val args: MovieDetailsWebViewArgs by navArgs()
@@ -37,12 +36,16 @@ class MovieDetailsWebView : Fragment() {
     }
 
     private fun loadMovieDetails() {
-        movieDetailsWebViewBinding.movieDetailsWebView.loadUrl(DETAILS_BASE_URL.plus(args.movieId))
-        movieDetailsWebViewBinding.movieDetailsWebView.requestFocus()
+        movieDetailsWebViewBinding.apply {
+            movieDetailsWebView.loadUrl(DETAILS_BASE_URL.plus(args.movieId))
+            movieDetailsWebView.requestFocus()
+            swipeRefresh.isRefreshing = false
+        }
     }
 
     private fun initializeSwipeRefresh() {
         movieDetailsWebViewBinding.swipeRefresh.setOnRefreshListener {
+            movieDetailsWebViewBinding.swipeRefresh.isRefreshing = true
             loadMovieDetails()
         }
     }

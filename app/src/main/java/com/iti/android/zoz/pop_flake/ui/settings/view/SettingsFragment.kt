@@ -22,8 +22,8 @@ class SettingsFragment : Fragment() {
 
     private val settingsViewModel: SettingsViewModel by activityViewModels()
 
-    private var _binding: FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
+    private var _settingsBinding: FragmentSettingsBinding? = null
+    private val settingsBinding get() = _settingsBinding!!
 
     private var _complaintListAdapter: ComplaintListAdapter? = null
     private val complaintListAdapter get() = _complaintListAdapter!!
@@ -33,8 +33,8 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        return binding.root
+        _settingsBinding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return settingsBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,7 +53,7 @@ class SettingsFragment : Fragment() {
 
     private fun initializeComplaintListAdapter() {
         _complaintListAdapter = ComplaintListAdapter()
-        binding.complaintsRecyclerView.apply {
+        settingsBinding.complaintsRecyclerView.apply {
             layoutManager = LinearLayoutManager(
                 requireContext(),
                 RecyclerView.VERTICAL,
@@ -67,7 +67,7 @@ class SettingsFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             settingsViewModel.complaints.buffer().collect { complaintList ->
                 if (complaintList.isNotEmpty()) {
-                    binding.complaintsRecyclerView.visibility = View.VISIBLE
+                    settingsBinding.complaintsRecyclerView.visibility = View.VISIBLE
                     complaintListAdapter.setComplaintList(complaintList)
                 }
             }
@@ -77,16 +77,16 @@ class SettingsFragment : Fragment() {
     private fun observeOnThemeMode() {
         settingsViewModel.themeMode.observe(viewLifecycleOwner) { themeMode ->
             when (themeMode) {
-                AppCompatDelegate.MODE_NIGHT_NO -> binding.darkModeSwitch.isChecked = false
-                AppCompatDelegate.MODE_NIGHT_YES -> binding.darkModeSwitch.isChecked = true
-                else -> binding.darkModeSwitch.isChecked = false
+                AppCompatDelegate.MODE_NIGHT_NO -> settingsBinding.darkModeSwitch.isChecked = false
+                AppCompatDelegate.MODE_NIGHT_YES -> settingsBinding.darkModeSwitch.isChecked = true
+                else -> settingsBinding.darkModeSwitch.isChecked = false
             }
         }
     }
 
     private fun handleSwitchButton() {
-        binding.darkModeSwitch.setOnClickListener {
-            if (binding.darkModeSwitch.isChecked)
+        settingsBinding.darkModeSwitch.setOnClickListener {
+            if (settingsBinding.darkModeSwitch.isChecked)
                 settingsViewModel.switchOn()
             else
                 settingsViewModel.switchOff()
@@ -94,7 +94,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun handleSubmitButton() {
-        binding.btnSubmit.setOnClickListener {
+        settingsBinding.btnSubmit.setOnClickListener {
             findNavController().navigate(
                 SettingsFragmentDirections.actionNavigationSettingsToComplaintForm()
             )
@@ -104,6 +104,6 @@ class SettingsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _complaintListAdapter = null
-        _binding = null
+        _settingsBinding = null
     }
 }

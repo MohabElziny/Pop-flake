@@ -25,8 +25,8 @@ import kotlinx.coroutines.launch
 class SearchFragment : Fragment() {
     private val searchViewModel: SearchViewModel by viewModels()
 
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    private var _searchBinding: FragmentSearchBinding? = null
+    private val searchBinding get() = _searchBinding!!
 
     private var _searchingAdapter: SearchingAdapter? = null
     private val searchingAdapter get() = _searchingAdapter!!
@@ -36,8 +36,8 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding.root
+        _searchBinding = FragmentSearchBinding.inflate(inflater, container, false)
+        return searchBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,7 +49,7 @@ class SearchFragment : Fragment() {
 
     private fun initializeSearchingAdapter() {
         _searchingAdapter = SearchingAdapter(showMovieDetails)
-        binding.searchingRecyclingView.apply {
+        searchBinding.searchingRecyclingView.apply {
             layoutManager = GridLayoutManager(
                 requireContext(),
                 2,
@@ -62,7 +62,7 @@ class SearchFragment : Fragment() {
 
     private fun setupSearchBar() {
         lifecycleScope.launch {
-            binding.edtSearch.getQueryTextChangeStateFlow()
+            searchBinding.edtSearch.getQueryTextChangeStateFlow()
                 .debounce(500L)
                 .filter { query ->
                     return@filter if (query.isEmpty()) {
@@ -80,17 +80,17 @@ class SearchFragment : Fragment() {
 
     private fun observeSearchResult() {
         searchViewModel.searchingMovies.observe(viewLifecycleOwner) { searchResult ->
-            binding.searchingProgressBar.visibility = View.INVISIBLE
+            searchBinding.searchingProgressBar.visibility = View.INVISIBLE
             when (searchResult) {
                 ResultState.EmptyResult -> showSnackBar(getString(R.string.there_is_no_result))
                 is ResultState.Error -> showSnackBar(searchResult.errorString)
-                ResultState.Loading -> binding.apply {
+                ResultState.Loading -> searchBinding.apply {
                     searchingProgressBar.visibility = View.VISIBLE
                     searchingRecyclingView.visibility = View.INVISIBLE
                 }
                 is ResultState.Success -> {
                     searchingAdapter.setSearchingList(searchResult.data)
-                    binding.searchingRecyclingView.visibility = View.VISIBLE
+                    searchBinding.searchingRecyclingView.visibility = View.VISIBLE
                 }
             }
         }
@@ -105,6 +105,6 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _searchingAdapter = null
-        _binding = null
+        _searchBinding = null
     }
 }
