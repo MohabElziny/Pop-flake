@@ -22,7 +22,7 @@ class ComingSoonAdapter(private val showMovieDetails: (String) -> Unit) :
 
     inner class ComingSoonViewHolder(private val comingSoonBinding: DefaultMovieCardBinding) :
         RecyclerView.ViewHolder(comingSoonBinding.root) {
-        private val comingSoonMovie get() = comingSoonMovies[bindingAdapterPosition]
+        private val comingSoonMovie get() = comingSoonMovies[adapterPosition]
 
         init {
             comingSoonBinding.movieCard.setOnClickListener {

@@ -22,7 +22,7 @@ class TopRatedAdapter(private val showMovieDetails: (String) -> Unit) :
 
     inner class TopRatedViewHolder(private val topRatedBinding: RatedMovieCardBinding) :
         RecyclerView.ViewHolder(topRatedBinding.root) {
-        private val topRatedMovie get() = topRatedMovies[bindingAdapterPosition]
+        private val topRatedMovie get() = topRatedMovies[adapterPosition]
 
         init {
             topRatedBinding.movieCard.setOnClickListener {

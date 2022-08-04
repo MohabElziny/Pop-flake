@@ -94,6 +94,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getComingSoonMovies() {
+        _comingSoonMovies.value = ResultState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val comingSoonResponse = async { repository.getComingSoonMovies() }
             sendComingSoonResultState(comingSoonResponse.await())
@@ -115,6 +116,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getInTheaterMovies() {
+        _inTheaterMovies.value = ResultState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val inTheaterResponse = async { repository.getInTheatersMovies() }
             sendInTheaterResultState(inTheaterResponse.await())
@@ -136,6 +138,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getTopRatedMovies() {
+        _topRatedMovies.value = ResultState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val topRatedResponse = async { repository.getTopRatedMovies() }
             sendTopRatedResultState(topRatedResponse.await())
@@ -157,6 +160,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getBoxOfficeMovies() {
+        _boxOfficeMovies.value = ResultState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             val boxOfficeResponse = async { repository.getBoxOfficeMovies() }
             sendBoxOfficeResultState(boxOfficeResponse.await())
@@ -195,7 +199,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun startSwap() {
-        swapJob = setSwapTimer()
+        if (!::swapJob.isInitialized)
+            swapJob = setSwapTimer()
     }
 
     fun stopSwap() {

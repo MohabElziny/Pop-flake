@@ -20,8 +20,8 @@ import com.iti.android.zoz.pop_flake.ui.home.viewmodel.HomeViewModel
 import com.iti.android.zoz.pop_flake.utils.ZoomOutPageTransformer
 import com.iti.android.zoz.pop_flake.utils.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -62,6 +62,7 @@ class HomeFragment : Fragment() {
         initializeInTheatersAdapter()
         initializeTopRatedAdapter()
         initializeBoxOfficeAdapter()
+        initializeSwipeRefresh()
 
         homeViewModel.getMovies()
         homeViewModelObserve()
@@ -125,6 +126,13 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun initializeSwipeRefresh() {
+        binding.swiperefresh.setOnRefreshListener {
+            homeViewModel.getMovies()
+            binding.swiperefresh.isRefreshing = true
+        }
+    }
+
     private fun homeViewModelObserve() {
         posterObservation()
         comingSoonMoviesObservation()
@@ -135,8 +143,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun posterObservation() {
-        binding.viewPager2.visibility = View.INVISIBLE
-        binding.wormDotsIndicator.visibility = View.INVISIBLE
+        binding.viewPager2.visibility = View.GONE
+        binding.wormDotsIndicator.visibility = View.GONE
         lifecycleScope.launch {
             homeViewModel.postersList.observe(viewLifecycleOwner) {
                 trailersAdapter.setPostersList(it)
@@ -157,7 +165,7 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_coming_soon_movies))
                     is ResultState.Error -> showSnackBar(comingSoonMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        binding.swiperefresh.isRefreshing = true
                         binding.comingSoonRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> comingSoonAdapter.setComingSoonMoviesList(
@@ -175,7 +183,7 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_in_theaters_movies))
                     is ResultState.Error -> showSnackBar(inTheatersMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        binding.swiperefresh.isRefreshing = true
                         binding.inTheatersRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> inTheatersAdapter.setInTheaterMoviesList(
@@ -193,7 +201,7 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_top_rated_movies))
                     is ResultState.Error -> showSnackBar(topRatedMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        binding.swiperefresh.isRefreshing = true
                         binding.topRatedRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> topRatedAdapter.setTopRatedMoviesList(
@@ -211,7 +219,7 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_box_office_movies))
                     is ResultState.Error -> showSnackBar(boxOfficeMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
+                        binding.swiperefresh.isRefreshing = true
                         binding.boxOfficeRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> boxOfficeAdapter.setBoxOfficeMoviesList(
@@ -227,7 +235,7 @@ class HomeFragment : Fragment() {
             homeViewModel.receivedAllData.observe(viewLifecycleOwner) { receivedAll ->
                 if (receivedAll) {
                     binding.apply {
-                        progressBar.visibility = View.GONE
+                        binding.swiperefresh.isRefreshing = false
                         boxOfficeRecyclerview.visibility = View.VISIBLE
                         inTheatersRecyclerview.visibility = View.VISIBLE
                         comingSoonRecyclerview.visibility = View.VISIBLE

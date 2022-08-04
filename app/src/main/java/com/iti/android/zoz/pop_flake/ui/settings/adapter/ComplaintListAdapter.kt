@@ -23,7 +23,7 @@ class ComplaintListAdapter : RecyclerView.Adapter<ComplaintListAdapter.Complaint
 
     inner class ComplaintListViewHolder(private val complaintCardBinding: ComplaintCardBinding) :
         RecyclerView.ViewHolder(complaintCardBinding.root) {
-        private val complaint get() = complaintList[bindingAdapterPosition]
+        private val complaint get() = complaintList[adapterPosition]
 
         fun bindData() {
             setName()

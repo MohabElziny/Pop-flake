@@ -21,7 +21,7 @@ class InTheaterAdapter(private val showMovieDetails: (String) -> Unit) :
 
     inner class InTheaterViewHolder(private val ratingFilmBinding: RatedMovieCardBinding) :
         RecyclerView.ViewHolder(ratingFilmBinding.root) {
-        private val inTheaterMovie get() = inTheaterMovies[bindingAdapterPosition]
+        private val inTheaterMovie get() = inTheaterMovies[adapterPosition]
 
         init {
             ratingFilmBinding.movieCard.setOnClickListener {

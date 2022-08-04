@@ -22,7 +22,7 @@ class BoxOfficeAdapter(private val showMovieDetails: (String) -> Unit) :
 
     inner class BoxOfficeViewHolder(private val boxOfficeBinding: DefaultMovieCardBinding) :
         RecyclerView.ViewHolder(boxOfficeBinding.root) {
-        private val boxOfficeMovie get() = boxOfficeMovies[bindingAdapterPosition]
+        private val boxOfficeMovie get() = boxOfficeMovies[adapterPosition]
 
         init {
             boxOfficeBinding.movieCard.setOnClickListener {

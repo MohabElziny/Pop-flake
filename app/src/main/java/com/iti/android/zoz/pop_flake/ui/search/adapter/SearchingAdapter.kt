@@ -21,7 +21,7 @@ class SearchingAdapter(private val showMovieDetails: (String) -> Unit) :
 
     inner class SearchViewHolder(private val searchBinding: DefaultMovieCardBinding) :
         RecyclerView.ViewHolder(searchBinding.root) {
-        private val movie get() = searchingList[bindingAdapterPosition]
+        private val movie get() = searchingList[adapterPosition]
 
         init {
             searchBinding.movieCard.setOnClickListener {

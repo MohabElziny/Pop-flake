@@ -20,7 +20,7 @@ class TrailerViewPagerAdapter(private val showTrailer: (String) -> Unit) :
 
     inner class TrailerViewHolder(private val posterTrailerBinding: PosterTrailerLayoutBinding) :
         RecyclerView.ViewHolder(posterTrailerBinding.root) {
-        private val poster get() = postersList[bindingAdapterPosition]
+        private val poster get() = postersList[adapterPosition]
 
         init {
             posterTrailerBinding.imageButton.setOnClickListener {
