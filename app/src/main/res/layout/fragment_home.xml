@@ -25,21 +25,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-                android:id="@+id/worm_dots_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_6sdp"
-                app:dotsColor="@color/purple_200"
-                app:dotsSize="@dimen/_12sdp"
-                app:dotsSpacing="@dimen/_3sdp"
-                app:dotsWidthFactor="2.5"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/viewPager2"
-                app:layout_constraintTop_toBottomOf="@+id/viewPager2"
-                app:progressMode="false"
-                app:selectedDotColor="@color/purple_500" />
-
             <TextView
                 android:id="@+id/txt_coming_soon"
                 style="@style/heading3"
@@ -48,7 +33,7 @@
                 android:layout_margin="@dimen/_12sdp"
                 android:text="@string/coming_soon"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/worm_dots_indicator" />
+                app:layout_constraintTop_toBottomOf="@id/viewPager2" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/coming_soon_recyclerview"

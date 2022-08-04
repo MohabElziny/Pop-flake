@@ -72,7 +72,6 @@ class HomeFragment : Fragment() {
         _trailersAdapter = TrailerViewPagerAdapter(showTrailer)
         homeBinding.viewPager2.apply {
             adapter = trailersAdapter
-            homeBinding.wormDotsIndicator.attachTo(this)
             val zoomOutPageTransformer = ZoomOutPageTransformer()
             setPageTransformer { page, position ->
                 zoomOutPageTransformer.transformPage(page, position)
@@ -143,18 +142,24 @@ class HomeFragment : Fragment() {
     }
 
     private fun posterObservation() {
-        homeBinding.viewPager2.visibility = View.GONE
-        homeBinding.wormDotsIndicator.visibility = View.GONE
-        lifecycleScope.launch {
-            homeViewModel.postersList.observe(viewLifecycleOwner) {
-                trailersAdapter.setPostersList(it)
-                homeViewModel.startSwap()
+        lifecycleScope.launchWhenStarted {
+            homeViewModel.moviesPoster.buffer().collect { postersResult ->
+                when (postersResult) {
+                    ResultState.EmptyResult -> showSnackBar(getString(R.string.no_posters))
+                    is ResultState.Error -> showSnackBar(postersResult.errorString)
+                    ResultState.Loading -> {
+                        homeBinding.swipeRefresh.isRefreshing = true
+                        homeBinding.viewPager2.visibility = View.GONE
+                    }
+                    is ResultState.Success -> {
+                        trailersAdapter.setPostersList(postersResult.data)
+                        homeViewModel.startSwap()
+                    }
+                }
             }
         }
-        lifecycleScope.launch {
-            homeViewModel.viewPagerPosition.observe(viewLifecycleOwner) {
-                homeBinding.viewPager2.setCurrentItem(it, true)
-            }
+        homeViewModel.viewPagerPosition.observe(viewLifecycleOwner) { position ->
+            homeBinding.viewPager2.setCurrentItem(position, true)
         }
     }
 
@@ -241,7 +246,6 @@ class HomeFragment : Fragment() {
                         comingSoonRecyclerview.visibility = View.VISIBLE
                         topRatedRecyclerview.visibility = View.VISIBLE
                         viewPager2.visibility = View.VISIBLE
-                        wormDotsIndicator.visibility = View.VISIBLE
                     }
                 }
             }

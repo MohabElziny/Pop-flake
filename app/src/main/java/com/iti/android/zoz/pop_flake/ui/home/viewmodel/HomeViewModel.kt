@@ -8,6 +8,7 @@ import com.iti.android.zoz.pop_flake.data.NetworkResponse
 import com.iti.android.zoz.pop_flake.data.ResultState
 import com.iti.android.zoz.pop_flake.data.pojos.*
 import com.iti.android.zoz.pop_flake.data.repository.IRepository
+import com.iti.android.zoz.pop_flake.domain.IPostersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,16 +17,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: IRepository
+    private val repository: IRepository,
+    private val postersUseCase: IPostersUseCase
 ) : ViewModel() {
 
     private lateinit var swapJob: Job
+    private var posterList: List<Poster> = emptyList()
     private var currentPosition = 0
-    private val posterList: MutableList<Poster> = mutableListOf()
 
-    private val _postersList: MutableLiveData<List<Poster>> = MutableLiveData()
-    val postersList: LiveData<List<Poster>>
-        get() = _postersList
+    private val _moviesPoster: MutableStateFlow<ResultState<List<Poster>>> =
+        MutableStateFlow(ResultState.Loading)
+    val moviesPoster get() = _moviesPoster.asStateFlow()
 
     private val _viewPagerPosition: MutableLiveData<Int> = MutableLiveData()
     val viewPagerPosition: LiveData<Int>
@@ -55,40 +57,34 @@ class HomeViewModel @Inject constructor(
     fun getMovies() {
         counting = 0
         _receivedAllData.value = false
-        posterList.clear()
-        getMostPopularMovies()
+        getMoviesPosters()
         getComingSoonMovies()
         getInTheaterMovies()
         getTopRatedMovies()
         getBoxOfficeMovies()
     }
 
-    private fun getMostPopularMovies() {
+    private fun getMoviesPosters() {
+        _moviesPoster.value = ResultState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            val mostPopularMovieResponse = async { repository.getMostPopularMovies() }
-            getMostPopularMoviesPosters(mostPopularMovieResponse.await())
+            val postersResponse = async { postersUseCase.getMoviesPosters() }
+            sendPostersResultState(postersResponse.await())
         }
     }
 
-    private fun getMostPopularMoviesPosters(response: NetworkResponse<List<MostPopularMovie>>) {
+    private suspend fun sendPostersResultState(response: NetworkResponse<List<Poster>>) {
+        increaseCounting()
         when (response) {
-            is NetworkResponse.FailureResponse -> {
-                _postersList.postValue(emptyList())
-                increaseCounting()
-            }
+            is NetworkResponse.FailureResponse -> _moviesPoster.emit(
+                ResultState.Error(response.errorString)
+            )
             is NetworkResponse.SuccessResponse -> {
                 if (response.data.isEmpty())
-                    _postersList.postValue(emptyList())
-                else if (response.data.size > 5) {
-                    for (i in 0 until 5)
-                        getPostersList(response.data[i])
-                    _postersList.postValue(posterList)
-                } else {
-                    for (i in 0 until response.data.size)
-                        getPostersList(response.data[i])
-                    _postersList.postValue(posterList)
+                    _moviesPoster.emit(ResultState.EmptyResult)
+                else {
+                    posterList = response.data
+                    _moviesPoster.emit(ResultState.Success(response.data))
                 }
-                increaseCounting()
             }
         }
     }
@@ -101,16 +97,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun sendComingSoonResultState(response: NetworkResponse<List<Movie>>) {
+    private suspend fun sendComingSoonResultState(response: NetworkResponse<List<Movie>>) {
         increaseCounting()
         when (response) {
-            is NetworkResponse.FailureResponse -> _comingSoonMovies.value =
+            is NetworkResponse.FailureResponse -> _comingSoonMovies.emit(
                 ResultState.Error(response.errorString)
+            )
             is NetworkResponse.SuccessResponse -> {
                 if (response.data.isEmpty())
-                    _comingSoonMovies.value = ResultState.EmptyResult
+                    _comingSoonMovies.emit(ResultState.EmptyResult)
                 else
-                    _comingSoonMovies.value = ResultState.Success(response.data)
+                    _comingSoonMovies.emit(ResultState.Success(response.data))
             }
         }
     }
@@ -123,16 +120,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun sendInTheaterResultState(response: NetworkResponse<List<Movie>>) {
+    private suspend fun sendInTheaterResultState(response: NetworkResponse<List<Movie>>) {
         increaseCounting()
         when (response) {
-            is NetworkResponse.FailureResponse -> _inTheaterMovies.value =
+            is NetworkResponse.FailureResponse -> _inTheaterMovies.emit(
                 ResultState.Error(response.errorString)
+            )
             is NetworkResponse.SuccessResponse -> {
                 if (response.data.isEmpty())
-                    _inTheaterMovies.value = ResultState.EmptyResult
+                    _inTheaterMovies.emit(ResultState.EmptyResult)
                 else
-                    _inTheaterMovies.value = ResultState.Success(response.data)
+                    _inTheaterMovies.emit(ResultState.Success(response.data))
             }
         }
     }
@@ -145,16 +143,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun sendTopRatedResultState(response: NetworkResponse<List<TopMovie>>) {
+    private suspend fun sendTopRatedResultState(response: NetworkResponse<List<TopMovie>>) {
         increaseCounting()
         when (response) {
-            is NetworkResponse.FailureResponse -> _topRatedMovies.value =
+            is NetworkResponse.FailureResponse -> _topRatedMovies.emit(
                 ResultState.Error(response.errorString)
+            )
             is NetworkResponse.SuccessResponse -> {
                 if (response.data.isEmpty())
-                    _topRatedMovies.value = ResultState.EmptyResult
+                    _topRatedMovies.emit(ResultState.EmptyResult)
                 else
-                    _topRatedMovies.value = ResultState.Success(response.data)
+                    _topRatedMovies.emit(ResultState.Success(response.data))
             }
         }
     }
@@ -167,33 +166,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun sendBoxOfficeResultState(response: NetworkResponse<List<BoxOfficeMovie>>) {
+    private suspend fun sendBoxOfficeResultState(response: NetworkResponse<List<BoxOfficeMovie>>) {
         increaseCounting()
         when (response) {
-            is NetworkResponse.FailureResponse -> _boxOfficeMovies.value =
+            is NetworkResponse.FailureResponse -> _boxOfficeMovies.emit(
                 ResultState.Error(response.errorString)
+            )
             is NetworkResponse.SuccessResponse -> {
                 if (response.data.isEmpty())
-                    _boxOfficeMovies.value = ResultState.EmptyResult
+                    _boxOfficeMovies.emit(ResultState.EmptyResult)
                 else
-                    _boxOfficeMovies.value = ResultState.Success(response.data)
-            }
-        }
-    }
-
-    private fun getPostersList(mostPopularMovie: MostPopularMovie) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val posterResponse = async { repository.getMoviePoster(mostPopularMovie.id) }
-            handlePosterResponse(posterResponse.await())
-        }
-    }
-
-    private fun handlePosterResponse(response: NetworkResponse<Poster>) {
-        when (response) {
-            is NetworkResponse.FailureResponse -> {}
-            is NetworkResponse.SuccessResponse -> {
-                if (response.data.id.isNotEmpty())
-                    posterList.add(response.data)
+                    _boxOfficeMovies.emit(ResultState.Success(response.data))
             }
         }
     }

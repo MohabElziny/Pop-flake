@@ -13,8 +13,8 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 interface DataSourceModule {
     @Binds
-    fun provideRemoteDataSource(remoteDataSource: RemoteDataSource): IRemoteDataSource
+    fun bindsRemoteDataSource(remoteDataSource: RemoteDataSource): IRemoteDataSource
 
     @Binds
-    fun provideLocalDataSource(localDataSource: LocalDataSource): ILocalDataSource
+    fun bindsLocalDataSource(localDataSource: LocalDataSource): ILocalDataSource
 }
