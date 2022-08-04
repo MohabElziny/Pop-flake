@@ -127,9 +127,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun initializeSwipeRefresh() {
-        binding.swiperefresh.setOnRefreshListener {
+        binding.swipeRefresh.setOnRefreshListener {
             homeViewModel.getMovies()
-            binding.swiperefresh.isRefreshing = true
+            binding.swipeRefresh.isRefreshing = true
         }
     }
 
@@ -165,7 +165,7 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_coming_soon_movies))
                     is ResultState.Error -> showSnackBar(comingSoonMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.swiperefresh.isRefreshing = true
+                        binding.swipeRefresh.isRefreshing = true
                         binding.comingSoonRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> comingSoonAdapter.setComingSoonMoviesList(
@@ -183,7 +183,7 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_in_theaters_movies))
                     is ResultState.Error -> showSnackBar(inTheatersMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.swiperefresh.isRefreshing = true
+                        binding.swipeRefresh.isRefreshing = true
                         binding.inTheatersRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> inTheatersAdapter.setInTheaterMoviesList(
@@ -201,7 +201,7 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_top_rated_movies))
                     is ResultState.Error -> showSnackBar(topRatedMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.swiperefresh.isRefreshing = true
+                        binding.swipeRefresh.isRefreshing = true
                         binding.topRatedRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> topRatedAdapter.setTopRatedMoviesList(
@@ -219,7 +219,7 @@ class HomeFragment : Fragment() {
                     ResultState.EmptyResult -> showSnackBar(getString(R.string.no_box_office_movies))
                     is ResultState.Error -> showSnackBar(boxOfficeMoviesResult.errorString)
                     ResultState.Loading -> {
-                        binding.swiperefresh.isRefreshing = true
+                        binding.swipeRefresh.isRefreshing = true
                         binding.boxOfficeRecyclerview.visibility = View.INVISIBLE
                     }
                     is ResultState.Success -> boxOfficeAdapter.setBoxOfficeMoviesList(
@@ -235,7 +235,7 @@ class HomeFragment : Fragment() {
             homeViewModel.receivedAllData.observe(viewLifecycleOwner) { receivedAll ->
                 if (receivedAll) {
                     binding.apply {
-                        binding.swiperefresh.isRefreshing = false
+                        binding.swipeRefresh.isRefreshing = false
                         boxOfficeRecyclerview.visibility = View.VISIBLE
                         inTheatersRecyclerview.visibility = View.VISIBLE
                         comingSoonRecyclerview.visibility = View.VISIBLE
