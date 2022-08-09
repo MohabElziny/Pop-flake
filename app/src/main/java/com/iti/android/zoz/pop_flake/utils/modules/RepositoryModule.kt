@@ -11,5 +11,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 interface RepositoryModule {
     @Binds
-    fun bindsRepository(repository: Repository): IRepository
+    fun bindRepository(repository: Repository): IRepository
 }

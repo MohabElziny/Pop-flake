@@ -11,5 +11,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 interface UseCaseModule {
     @Binds
-    fun bindsPosterUseCase(postersUseCase: PostersUseCase): IPostersUseCase
+    fun bindPosterUseCase(postersUseCase: PostersUseCase): IPostersUseCase
 }
